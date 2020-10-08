@@ -1,0 +1,42 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MVVMChatClient"   
+        xmlns:Core="clr-namespace:MVVMChatClient.Core.ViewModel;assembly=MVVMChatClient.Core" 
+    
+        xmlns:z="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" x:Name="win"
+    
+        x:Class="MVVMChatClient.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="800" DataContext="{x:Type Core:WindowsViewModel}" >
+
+
+    <Window.Resources>
+
+        <DataTemplate DataType="{x:Type Core:LoginViewModel}">
+            <local:Login/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type Core:ChatViewModel}">
+            <local:Chat/>
+        </DataTemplate>
+
+    </Window.Resources>
+    
+    <z:Interaction.Triggers>
+        <z:EventTrigger EventName="Closing">
+            <ei:CallMethodAction TargetObject="{Binding CurrentView}" MethodName="Disconnect"/>
+        </z:EventTrigger>
+    </z:Interaction.Triggers>
+
+    <Window.Background>
+        <ImageBrush ImageSource="Images/figure_colorful_bright_background_blur_46937_1280x720.jpg"/>
+    </Window.Background>
+
+    <Grid>
+        <Frame Content="{Binding CurrentView}" NavigationUIVisibility="Hidden"/>
+    </Grid>
+
+</Window>

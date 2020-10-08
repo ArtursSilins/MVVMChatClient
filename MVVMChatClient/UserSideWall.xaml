@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="MVVMChatClient.UserSideWall"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MVVMChatClient"
+             xmlns:core="clr-namespace:MVVMChatClient.Core"
+
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="250" >
+    <Grid>
+
+        <StackPanel Opacity="0.3" Background="#FF689163"/>
+        
+        <StackPanel >
+
+
+            <Border Width="105"
+                Margin="0,10,0,0"
+                Height="{Binding ActualWidth, RelativeSource={RelativeSource Self} }"
+                CornerRadius="{Binding ActualWidth, RelativeSource={RelativeSource Self}}">
+                <Border.Background>
+                    <ImageBrush ImageSource="{Binding UserPicture}" Stretch="UniformToFill" />
+                </Border.Background>
+            </Border>
+            
+            <TextBlock Grid.Row="1"
+                   Text="{Binding NameText}"
+                   FontSize="25"
+                   FontWeight="Bold"
+                   Foreground="AliceBlue"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Margin="0,10,0,0">
+
+            </TextBlock>
+            
+        </StackPanel>
+    </Grid>
+</UserControl>

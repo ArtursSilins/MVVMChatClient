@@ -1,0 +1,117 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" x:Class="MVVMChatClient.MessageItemControl" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Storyboard x:Key="OnMouseEnter1">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="border1">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="80"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="80"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="OnMouseLeave1">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="border1">
+                <EasingDoubleKeyFrame KeyTime="0" Value="80"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="50"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </UserControl.Resources>
+
+    <Grid Height="Auto" Margin="4,0,10,0"  HorizontalAlignment="{Binding MessageAlignment}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border x:Name="border1" Visibility="{Binding MessagePictureVisibility}"
+                Margin="10 15 5 0"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left" 
+                Width="50"
+                CornerRadius="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                BorderBrush="White"
+                BorderThickness="1"
+                Grid.RowSpan="3" RenderTransformOrigin="0.5,0.5">
+
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                    <BeginStoryboard Storyboard="{StaticResource OnMouseEnter1}"/>
+                </EventTrigger>
+
+                <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                    <BeginStoryboard x:Name="OnMouseLeave1_BeginStoryboard"
+                             Storyboard="{StaticResource OnMouseLeave1}"/>
+                </EventTrigger>
+            </Border.Triggers>
+
+            <Border.Background>
+                <ImageBrush ImageSource="{Binding MessagePicture}" Stretch="UniformToFill"/>
+            </Border.Background>
+
+            <Border.Effect>
+                <DropShadowEffect Opacity="0.3" BlurRadius="4" Direction="270"/>
+            </Border.Effect>
+
+        </Border>
+
+        <TextBlock Text="{Binding Name}"
+                   Visibility="{Binding Sender}"
+                   Margin="5 0 0 5"
+                   FontSize="14"
+                   Foreground="#FFE0DBDB"
+                   Grid.Column="1" />
+
+        <Border x:Name="border"              
+                Padding="6,0,0,6"
+                CornerRadius="8"
+                BorderBrush="Black"
+                Background="{Binding MessageColour}"
+                RenderTransformOrigin="0.5,0.5"
+                Grid.Column="1"
+                Grid.Row="1"
+                >
+
+            <Border.Effect>
+                <DropShadowEffect Opacity="0.3" BlurRadius="4" Direction="270"/>
+            </Border.Effect>
+
+            <StackPanel x:Name="stackPanel"
+                        MinHeight="30"
+                        Width="Auto"
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        >
+
+                <TextBlock x:Name="textBlock1"              
+                           TextWrapping="Wrap"
+                           MaxWidth="250"
+                           Text="{Binding MessageText}"
+                           Padding="0 5 5 5"
+                           FontSize="20"
+                           Foreground="Black"
+                           Grid.Column="1"
+                           Grid.Row="1"/>
+            </StackPanel>
+        </Border>
+        <TextBlock x:Name="textBlock"
+                   Text="{Binding MessageTime}"
+                   Padding="5, 0, 0, 10"
+                   FontSize="14"
+                   Foreground="#FFE0DBDB"
+                   RenderTransformOrigin="0.5,0.5"
+                   Grid.Column="1"
+                   Grid.Row="2"/>
+    </Grid>
+
+
+</UserControl>

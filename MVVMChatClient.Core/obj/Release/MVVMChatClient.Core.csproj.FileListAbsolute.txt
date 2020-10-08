@@ -1,0 +1,9 @@
+C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\bin\Release\MVVMChatClient.Core.dll
+C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\bin\Release\MVVMChatClient.Core.pdb
+C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Release\MVVMChatClient.Core.csproj.CoreCompileInputs.cache
+C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Release\MVVMChatClient.Core.dll
+C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Release\MVVMChatClient.Core.pdb
+C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Release\MVVMChatClient.Core.csprojAssemblyReference.cache
+C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\bin\Release\Newtonsoft.Json.dll
+C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\bin\Release\Newtonsoft.Json.xml
+C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Release\MVVMChatClient.Core.csproj.CopyComplete
