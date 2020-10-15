@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace MVVMChatClient.Core.ViewModel.BaseClass
 {
-    public class ViewModelBase : INotifyPropertyChanged
+    public abstract class ViewModelBase : INotifyPropertyChanged
     {
       
         public event PropertyChangedEventHandler PropertyChanged = (s, e) => {};
