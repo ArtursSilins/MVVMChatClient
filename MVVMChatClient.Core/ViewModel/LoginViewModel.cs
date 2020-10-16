@@ -18,6 +18,7 @@ namespace MVVMChatClient.Core.ViewModel
 
         public bool firstTime { get; set; }
         private bool IsPicture { get; set; }
+        public static bool IsNameSet { get; set; }
 
         private string nameText;
 
@@ -31,8 +32,14 @@ namespace MVVMChatClient.Core.ViewModel
             set
             {
                 nameText = value;
-                
+
+                if (value.Length > 0)
+                    IsNameSet = true;
+                else
+                    IsNameSet = false;
+
                 OnPropertyChanged(nameof(NameText));
+
             }
         }
         private bool male;
@@ -67,6 +74,9 @@ namespace MVVMChatClient.Core.ViewModel
 
                 female = value;
                 OnPropertyChanged(nameof(Female));
+
+                if (!IsPicture)
+                    profilePicture = Gender.Female;
             }
         }
 
@@ -81,9 +91,13 @@ namespace MVVMChatClient.Core.ViewModel
                 return profilePicture;
             }
             set
-            {
+            {                
                 profilePicture = value;
-                OnPropertyChanged(nameof(ProfilePicture));
+                if (profilePicture != "")
+                    OnPropertyChanged(nameof(ProfilePicture));
+                else
+                    IsPicture = false;
+                   
             }
         }
         
@@ -99,7 +113,8 @@ namespace MVVMChatClient.Core.ViewModel
             _windowsViewModel = windowsViewModel;
 
             firstTime = true;
-                    
+            IsNameSet = false;
+
             SetView = new ParameterRelayCommand(_windowsViewModel, GetUserData, chatting.Receiving,
                 this, messageContent, tcpEndPoint, container);
 

@@ -40,8 +40,12 @@ namespace MVVMChatClient.Core.ViewModel.Commands
 
         public void Execute(object parameter)
         {
-            _execute2.Invoke();
-            _execute3.Invoke(_windowsViewModel, _userData, _messageContent, _tcpEndPoint, _container);
+            if(LoginViewModel.IsNameSet)
+            {
+                _execute2.Invoke();
+                _execute3.Invoke(_windowsViewModel, _userData, _messageContent, _tcpEndPoint, _container);
+            }
+            
         }
     }
 }
