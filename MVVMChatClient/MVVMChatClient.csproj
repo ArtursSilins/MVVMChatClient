@@ -67,6 +67,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AlertMessages.cs" />
+    <Compile Include="AttachedProperties\StoryboardHelper.cs" />
     <Compile Include="BaseAttachedProperty.cs" />
     <Compile Include="Chat.xaml.cs">
       <DependentUpon>Chat.xaml</DependentUpon>
@@ -89,7 +90,7 @@
     <Compile Include="MessagePicture.xaml.cs">
       <DependentUpon>MessagePicture.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ScrollHelper.cs" />
+    <Compile Include="AttachedProperties\ScrollHelper.cs" />
     <Compile Include="UserSideWall.xaml.cs">
       <DependentUpon>UserSideWall.xaml</DependentUpon>
     </Compile>
@@ -229,6 +230,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\light-gray-wood-flooring-smart-kids-educational-club-light-wood-crossword-light-wood-texture.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Embossment-triangular-blue-background-vector-04.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
