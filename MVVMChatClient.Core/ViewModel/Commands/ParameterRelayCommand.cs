@@ -19,10 +19,11 @@ namespace MVVMChatClient.Core.ViewModel.Commands
         private ITcpEndPoint _tcpEndPoint;
         private IJsonContainer _container;      
         private IWindowsViewModel _windowsViewModel;
+        private Action _noNameCheck;
 
 
         public ParameterRelayCommand(IWindowsViewModel windowsViewModel, Action execute2, Action<IWindowsViewModel ,ILoginViewModel, IMessageContent, ITcpEndPoint, IJsonContainer> execute3,
-            LoginViewModel userData, IMessageContent messageContent, ITcpEndPoint tcpEndPoint, IJsonContainer container)
+            LoginViewModel userData, IMessageContent messageContent, ITcpEndPoint tcpEndPoint, IJsonContainer container, Action noNameCheck)
         {
             _execute2 = execute2;
             _execute3 = execute3;
@@ -31,6 +32,7 @@ namespace MVVMChatClient.Core.ViewModel.Commands
             _tcpEndPoint = tcpEndPoint;
             _container = container;;
             _windowsViewModel = windowsViewModel;
+            _noNameCheck = noNameCheck;
         }
              
         public bool CanExecute(object parameter)
@@ -40,12 +42,17 @@ namespace MVVMChatClient.Core.ViewModel.Commands
 
         public void Execute(object parameter)
         {
+            
             if(LoginViewModel.IsNameSet)
             {
                 _execute2.Invoke();
                 _execute3.Invoke(_windowsViewModel, _userData, _messageContent, _tcpEndPoint, _container);
             }
-            
+            else
+            {
+                _noNameCheck.Invoke();
+            }
+                    
         }
     }
 }

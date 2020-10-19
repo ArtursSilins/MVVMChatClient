@@ -2,6 +2,8 @@
 using MVVMChatClient.Core.Model;
 using MVVMChatClient.Core.ViewModel.BaseClass;
 using MVVMChatClient.Core.ViewModel.Commands;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MVVMChatClient.Core.ViewModel
@@ -15,6 +17,7 @@ namespace MVVMChatClient.Core.ViewModel
         public ICommand SetPicFamele { get; private set; }
         public ICommand SetPicMale { get; private set; }
         public ICommand AddPic { get; private set; }
+
 
         public bool firstTime { get; set; }
         private bool IsPicture { get; set; }
@@ -38,11 +41,43 @@ namespace MVVMChatClient.Core.ViewModel
                 else
                     IsNameSet = false;
 
+                   
                 OnPropertyChanged(nameof(NameText));
 
             }
         }
         private bool male;
+
+        private bool noText;
+
+        public bool NoText
+        {
+            get
+            {
+                return noText;
+            }
+            set
+            {
+                noText = value;
+                OnPropertyChanged(nameof(NoText));
+            }
+        }
+
+        private string arrowVisibility;
+
+        public string ArrowVisibility
+        {
+            get
+            {
+                return arrowVisibility;
+            }
+            set
+            {
+                arrowVisibility = value;
+                OnPropertyChanged(nameof(ArrowVisibility));
+            }
+        }
+
 
         public bool Male
         {
@@ -114,9 +149,10 @@ namespace MVVMChatClient.Core.ViewModel
 
             firstTime = true;
             IsNameSet = false;
+            ArrowVisibility = "Hidden";
 
             SetView = new ParameterRelayCommand(_windowsViewModel, GetUserData, chatting.Receiving,
-                this, messageContent, tcpEndPoint, container);
+                this, messageContent, tcpEndPoint, container, NoNameCheck);
 
             SetPicFamele = new RelayCommand(SetDefoultFamelePic);
             SetPicMale = new RelayCommand(SetDefoultMalePic);
@@ -142,8 +178,20 @@ namespace MVVMChatClient.Core.ViewModel
             UserInfo.AddedPicture = ProfilePicture;
         }
 
+        private void NoNameCheck()
+        {
+            if (_person.Name == "" || _person.Name == null)
+            {
+                ArrowVisibility = "Visible";
+                NoText = true;
+                NoText = false;
+            }              
+            else
+                NoText = false;
+        }
         private void GetUserData()
-        {       
+        {
+          
             _person.Name = NameText;
             _person.Male = Male;
             _person.Female = Female;

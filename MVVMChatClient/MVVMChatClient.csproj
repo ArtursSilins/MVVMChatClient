@@ -67,7 +67,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AlertMessages.cs" />
-    <Compile Include="AttachedProperties\StoryboardHelper.cs" />
     <Compile Include="BaseAttachedProperty.cs" />
     <Compile Include="Chat.xaml.cs">
       <DependentUpon>Chat.xaml</DependentUpon>
