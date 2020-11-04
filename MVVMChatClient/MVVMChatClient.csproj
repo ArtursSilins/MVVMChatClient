@@ -67,11 +67,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AlertMessages.cs" />
-    <Compile Include="BaseAttachedProperty.cs" />
+    <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
     <Compile Include="Chat.xaml.cs">
       <DependentUpon>Chat.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ConnectonStatus.cs" />
     <Compile Include="FilePath.cs" />
     <Compile Include="ImageConverter.cs" />
     <Compile Include="Login.xaml.cs">

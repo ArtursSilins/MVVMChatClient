@@ -40,46 +40,46 @@ namespace MVVMChatClient.Core.Model
 
             Task.Run(() => {
 
-                ConnectingToServer();
-                
-                string con = "Connected";
-                var conByte = Encoding.UTF8.GetBytes(con);
+            ConnectingToServer();
 
-                TcpSocket.tcpSocket.BeginSend(conByte, 0, conByte.Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
-                connectDone.WaitOne();
+            string con = "Connected";
+            var conByte = Encoding.UTF8.GetBytes(con);
 
-                TcpSocket.tcpSocket.BeginSend(ConverData.ToSend(PersonList.GetPersonInfo()), 0, ConverData.ToSend(PersonList.GetPersonInfo()).Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
-                connectDone.WaitOne();
+            TcpSocket.tcpSocket.BeginSend(conByte, 0, conByte.Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
+            connectDone.WaitOne();
 
-                while (IsConnected)
+            TcpSocket.tcpSocket.BeginSend(ConverData.ToSend(PersonList.GetPersonInfo()), 0, ConverData.ToSend(PersonList.GetPersonInfo()).Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
+            connectDone.WaitOne();
+
+            while (IsConnected)
+            {
+                _windowsViewModel.ChangeView(1);
+
+                //TcpSocket.tcpSocket.GetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, 1);
+                //string ip = IPAddress.Loopback.ToString();
+                //var uri = new Uri("http://ip/");
+                //ServicePoint servicePoint = ServicePointManager.FindServicePoint(uri);
+                //servicePoint.SetTcpKeepAlive(true,1000, 1000);
+
+                var textFromServer = ReceivData(uiContext, container);
+
+                try
                 {
-                    _windowsViewModel.ChangeView(1);
+                    container = ConverData.ToReceiv<JsonContainer>(textFromServer.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Console.Write(ex.ToString());
+                }
 
-                    //TcpSocket.tcpSocket.GetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, 1);
-                    //string ip = IPAddress.Loopback.ToString();
-                    //var uri = new Uri("http://ip/");
-                    //ServicePoint servicePoint = ServicePointManager.FindServicePoint(uri);
-                    //servicePoint.SetTcpKeepAlive(true,1000, 1000);
-
-                    var textFromServer = ReceivData(uiContext, container);
-
-                    try
-                    {
-                        container = ConverData.ToReceiv<JsonContainer>(textFromServer.ToString());
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.Write(ex.ToString());
-                    }
-
-                    if (FirstTime)
-                    {
-                       if(container.CurrentPersonId != null)
+                if (FirstTime)
+                {
+                    if (container.CurrentPersonId != null)
                         Client.Id = container.CurrentPersonId.Id;
 
-                        AddToOnlineUserList(uiContext, container);
+                    AddToOnlineUserList(uiContext, container);
 
-                        GetAllMessages(messageContent, container, uiContext);
+                    GetAllMessages(messageContent, container, uiContext);
                                                 
 
                         FirstTime = false;

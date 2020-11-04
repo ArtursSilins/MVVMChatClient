@@ -39,7 +39,7 @@ namespace MVVMChatClient.Core.ViewModel.Commands
         {
             return true;
         }
-
+      
         public void Execute(object parameter)
         {
             

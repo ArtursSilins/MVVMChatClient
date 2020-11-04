@@ -30,7 +30,9 @@ namespace MVVMChatClient
             {
                 try
                 {
-                    image.Save(@"C:\Users\X\Downloads\ChatImage" + id + ".jpg", ImageFormat.Jpeg);  // Or Png
+                    CreateFolder();
+
+                    image.Save(@"C:\Users\X\Downloads\ChatData\ChatImage" + id + ".jpg", ImageFormat.Jpeg);  // Or Png
                 }
                 catch (Exception ex)
                 {
@@ -39,6 +41,10 @@ namespace MVVMChatClient
                 }
                 
             }
+        }
+        private void CreateFolder()
+        {
+            System.IO.Directory.CreateDirectory(@"C:\Users\X\Downloads\ChatData");
         }
     }
 }

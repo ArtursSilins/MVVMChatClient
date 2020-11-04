@@ -86,7 +86,7 @@ namespace MVVMChatClient.Core.ViewModel
             if (UserInfo.AddedPicture != null)
             {
                 _messageContent.Pic = ConvertImage.ToByte(UserInfo.AddedPicture);
-                _messageContent.MessagePicture = @"C:\Users\X\Downloads\ChatImage" + _messageContent.Id + ".jpg";
+                _messageContent.MessagePicture = @"C:\Users\X\Downloads\ChatData\ChatImage" + _messageContent.Id + ".jpg";
 
                 _messageContent.PictureChanged = true;
             }
