@@ -13,8 +13,8 @@ namespace MVVMChatClient.Core.ViewModel.Commands
     {
         public event EventHandler CanExecuteChanged;
         private Action _execute2;
-        private Action<IWindowsViewModel, ILoginViewModel, IMessageContent, ITcpEndPoint, IJsonContainer> _execute3;
-        private LoginViewModel _userData;
+        private Action<IWindowsViewModel, ISignUpViewModel, IMessageContent, ITcpEndPoint, IJsonContainer> _execute3;
+        private SignUpViewModel _userData;
         private IMessageContent _messageContent;
         private ITcpEndPoint _tcpEndPoint;
         private IJsonContainer _container;      
@@ -22,8 +22,8 @@ namespace MVVMChatClient.Core.ViewModel.Commands
         private Action _noNameCheck;
 
 
-        public ParameterRelayCommand(IWindowsViewModel windowsViewModel, Action execute2, Action<IWindowsViewModel ,ILoginViewModel, IMessageContent, ITcpEndPoint, IJsonContainer> execute3,
-            LoginViewModel userData, IMessageContent messageContent, ITcpEndPoint tcpEndPoint, IJsonContainer container, Action noNameCheck)
+        public ParameterRelayCommand(IWindowsViewModel windowsViewModel, Action execute2, Action<IWindowsViewModel ,ISignUpViewModel, IMessageContent, ITcpEndPoint, IJsonContainer> execute3,
+            SignUpViewModel userData, IMessageContent messageContent, ITcpEndPoint tcpEndPoint, IJsonContainer container, Action noNameCheck)
         {
             _execute2 = execute2;
             _execute3 = execute3;
@@ -43,7 +43,7 @@ namespace MVVMChatClient.Core.ViewModel.Commands
         public void Execute(object parameter)
         {
             
-            if(LoginViewModel.IsNameSet)
+            if(SignUpViewModel.IsNameSet)
             {
                 _execute2.Invoke();
                 _execute3.Invoke(_windowsViewModel, _userData, _messageContent, _tcpEndPoint, _container);

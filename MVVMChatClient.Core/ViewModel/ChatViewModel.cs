@@ -81,7 +81,7 @@ namespace MVVMChatClient.Core.ViewModel
 
             _messageContent.Name = UserInfo.Name;
 
-            _messageContent.Id = Client.Id;
+            _messageContent.Id = User.Id;
 
             if (UserInfo.AddedPicture != null)
             {
@@ -154,7 +154,7 @@ namespace MVVMChatClient.Core.ViewModel
 
             _disconnectContent = Factory.CreateDisconnectContent();
 
-            _disconnectContent.Id = Client.Id;
+            _disconnectContent.Id = User.Id;
 
             TcpSocket.tcpSocket.Send(ConverData.ToSend(_disconnectContent));
 

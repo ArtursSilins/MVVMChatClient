@@ -30,7 +30,7 @@ namespace MVVMChatClient.Core.ViewModel
 
             ViewModels = new List<object>
             {
-                new LoginViewModel(this, chatting, messageContent, person, TcpEndPoint, container, userContent),
+                new SignUpViewModel(this, chatting, messageContent, person, TcpEndPoint, container, userContent),
                 new ChatViewModel(messageContent, this)
             };
 

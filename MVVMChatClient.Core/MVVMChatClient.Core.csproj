@@ -46,14 +46,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IAlertMessages.cs" />
-    <Compile Include="Interfaces\IClientData.cs" />
     <Compile Include="Interfaces\IClosable.cs" />
     <Compile Include="Interfaces\IConnectingToServer.cs" />
     <Compile Include="Interfaces\IDisconnectContent.cs" />
     <Compile Include="Interfaces\IJsonContainer.cs" />
     <Compile Include="Interfaces\IFilePath.cs" />
     <Compile Include="Interfaces\IImageConverter.cs" />
-    <Compile Include="Interfaces\ILoginViewModel.cs" />
+    <Compile Include="Interfaces\ILogInViewModel.cs" />
+    <Compile Include="Interfaces\IUserValidationData.cs" />
+    <Compile Include="Interfaces\ISignUpViewModel.cs" />
     <Compile Include="Interfaces\IMessageContent.cs" />
     <Compile Include="Interfaces\IMessageList.cs" />
     <Compile Include="Interfaces\IPerson.cs" />
@@ -61,13 +62,13 @@
     <Compile Include="Interfaces\IUserContent.cs" />
     <Compile Include="Interfaces\IWindowsViewModel.cs" />
     <Compile Include="Model\AlertMessages.cs" />
-    <Compile Include="Model\ClientData.cs" />
     <Compile Include="Model\Chatting.cs" />
+    <Compile Include="Model\ClientComunication\StateObject.cs" />
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\ConverData.cs" />
     <Compile Include="Model\JsonContainer.cs" />
     <Compile Include="Model\CurrentPersonId.cs" />
-    <Compile Include="Model\DisconnectContentGeter.cs" />
+    <Compile Include="Model\User.cs" />
     <Compile Include="Model\DisconnectContent.cs" />
     <Compile Include="Model\EndPoint.cs" />
     <Compile Include="Model\Factory.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Model\MessageContent.cs" />
     <Compile Include="Model\MessageEncryption.cs" />
     <Compile Include="Model\MessageList.cs" />
+    <Compile Include="Model\ClientComunication\Client.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Model\Person.cs" />
     <Compile Include="Model\PersonList.cs" />
@@ -85,17 +87,21 @@
     <Compile Include="Model\TcpSocket.cs" />
     <Compile Include="Model\UserContent.cs" />
     <Compile Include="Model\UserGender.cs" />
+    <Compile Include="Model\UserValidationData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\ChatViewModel.cs" />
+    <Compile Include="ViewModel\Commands\LogInRelayCommand.cs" />
     <Compile Include="ViewModel\Commands\ObjecRelayCommand.cs" />
     <Compile Include="ViewModel\Commands\ParameterRelayCommand.cs" />
     <Compile Include="ViewModel\Commands\RelayCommand.cs" />
-    <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="ViewModel\SignUpViewModel.cs" />
     <Compile Include="ViewModel\BaseClass\ViewModelBase.cs" />
+    <Compile Include="ViewModel\LogInViewModel.cs" />
     <Compile Include="ViewModel\WindowsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -2,8 +2,8 @@ C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\bin\Debug\MVVMChatCli
 C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\bin\Debug\MVVMChatClient.Core.pdb
 C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\bin\Debug\Newtonsoft.Json.dll
 C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\bin\Debug\Newtonsoft.Json.xml
-C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatClient.Core.csprojAssemblyReference.cache
 C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatClient.Core.csproj.CoreCompileInputs.cache
 C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatClient.Core.csproj.CopyComplete
 C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatClient.Core.dll
 C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatClient.Core.pdb
+C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatClient.Core.csprojAssemblyReference.cache

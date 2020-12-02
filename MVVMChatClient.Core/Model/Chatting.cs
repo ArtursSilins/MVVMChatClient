@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.IO;
+using MVVMChatClient.Core.Model.ClientComunication;
 
 namespace MVVMChatClient.Core.Model
 {
@@ -23,9 +24,10 @@ namespace MVVMChatClient.Core.Model
         private ITcpEndPoint _tcpEndPoint;
         private IWindowsViewModel _windowsViewModel;
 
+        private static ManualResetEvent receiveDone = new ManualResetEvent(false);
         private static ManualResetEvent connectDone = new ManualResetEvent(false);
 
-        public void Receiving( IWindowsViewModel windowsViewModel, ILoginViewModel loginViewModel, IMessageContent messageContent,
+        public void Receiving( IWindowsViewModel windowsViewModel, ISignUpViewModel loginViewModel, IMessageContent messageContent,
             ITcpEndPoint tcpEndPoint, IJsonContainer container)
         {
 
@@ -40,47 +42,47 @@ namespace MVVMChatClient.Core.Model
 
             Task.Run(() => {
 
-            ConnectingToServer();
+                ConnectingToServer();
 
-            string con = "Connected";
-            var conByte = Encoding.UTF8.GetBytes(con);
+                //string con = "Connected";
+                //var conByte = Encoding.UTF8.GetBytes(con);
 
-            TcpSocket.tcpSocket.BeginSend(conByte, 0, conByte.Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
-            connectDone.WaitOne();
+                //TcpSocket.tcpSocket.BeginSend(conByte, 0, conByte.Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
+                //connectDone.WaitOne();
 
-            TcpSocket.tcpSocket.BeginSend(ConverData.ToSend(PersonList.GetPersonInfo()), 0, ConverData.ToSend(PersonList.GetPersonInfo()).Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
-            connectDone.WaitOne();
+                TcpSocket.tcpSocket.BeginSend(ConverData.ToSend(PersonList.GetPersonInfo()), 0, ConverData.ToSend(PersonList.GetPersonInfo()).Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
+                connectDone.WaitOne();
 
-            while (IsConnected)
-            {
-                _windowsViewModel.ChangeView(1);
-
-                //TcpSocket.tcpSocket.GetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, 1);
-                //string ip = IPAddress.Loopback.ToString();
-                //var uri = new Uri("http://ip/");
-                //ServicePoint servicePoint = ServicePointManager.FindServicePoint(uri);
-                //servicePoint.SetTcpKeepAlive(true,1000, 1000);
-
-                var textFromServer = ReceivData(uiContext, container);
-
-                try
+                while (IsConnected)
                 {
-                    container = ConverData.ToReceiv<JsonContainer>(textFromServer.ToString());
-                }
-                catch (Exception ex)
-                {
-                    Console.Write(ex.ToString());
-                }
+                    _windowsViewModel.ChangeView(1);
 
-                if (FirstTime)
-                {
-                    if (container.CurrentPersonId != null)
-                        Client.Id = container.CurrentPersonId.Id;
+                    //TcpSocket.tcpSocket.GetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, 1);
+                    //string ip = IPAddress.Loopback.ToString();
+                    //var uri = new Uri("http://ip/");
+                    //ServicePoint servicePoint = ServicePointManager.FindServicePoint(uri);
+                    //servicePoint.SetTcpKeepAlive(true,1000, 1000);
 
-                    AddToOnlineUserList(uiContext, container);
+                    var textFromServer = ReceivData(uiContext, container);
 
-                    GetAllMessages(messageContent, container, uiContext);
-                                                
+                    try
+                    {
+                        container = ConverData.ToReceiv<JsonContainer>(textFromServer.ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Write(ex.ToString());
+                    }
+
+                    if (FirstTime)
+                    {
+                        if (container.CurrentPersonId != null)
+                            User.Id = container.CurrentPersonId.Id;
+
+                        AddToOnlineUserList(uiContext, container);
+
+                        GetAllMessages(messageContent, container, uiContext);
+
 
                         FirstTime = false;
                     }
@@ -298,6 +300,109 @@ namespace MVVMChatClient.Core.Model
             }
             
             connectDone.Set();
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///
+
+
+        //private void Receiv()
+        //{
+        //    //Client.Connect(null);
+
+
+
+        //    Client.ReceiveAsync(TcpSocket.tcpSocket);
+        //    receiveDone.WaitOne();
+
+        //}
+
+        //private IWindowsViewModel _windowsViewModel2;
+        //private ISignUpViewModel _loginViewModel;
+        //private IMessageContent _messageContent;
+        //private IJsonContainer _container;
+
+
+        //public Chatting(IWindowsViewModel windowsViewModel, ISignUpViewModel loginViewModel,
+        //    IMessageContent messageContent, IJsonContainer container)
+        //{
+        //    _windowsViewModel2 = windowsViewModel;
+        //    _loginViewModel = loginViewModel;
+        //    _messageContent = messageContent;
+        //    _container = container;
+
+        //    Receiv();
+        //}
+        
+        public void Receiving2(IWindowsViewModel windowsViewModel, ISignUpViewModel loginViewModel,
+            IMessageContent messageContent, IJsonContainer container)
+        {
+            FirstTime = true;
+
+            Client.IsConnected = true;
+
+            var uiContext = SynchronizationContext.Current;
+
+            string con = "Connected";
+            var conByte = Encoding.UTF8.GetBytes(con);
+
+            TcpSocket.tcpSocket.BeginSend(conByte, 0, conByte.Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
+            connectDone.WaitOne();
+
+            TcpSocket.tcpSocket.BeginSend(ConverData.ToSend(PersonList.GetPersonInfo()), 0, ConverData.ToSend(PersonList.GetPersonInfo()).Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
+            connectDone.WaitOne();
+
+            while (Client.IsConnected)
+            {
+                _windowsViewModel.ChangeView(1);
+
+                Client.TextFromServer = "";
+
+                //var textFromServer = ReceivData(uiContext, container);
+                Client.ReceiveAsync(TcpSocket.tcpSocket);
+                Client.ReceiveDone.WaitOne();
+
+                try
+                {
+                    container = ConverData.ToReceiv<JsonContainer>(Client.TextFromServer);
+                }
+                catch (Exception ex)
+                {
+                    Console.Write(ex.ToString());
+                }
+
+                if (FirstTime)
+                {
+                    if (container.CurrentPersonId != null)
+                        User.Id = container.CurrentPersonId.Id;
+
+                    AddToOnlineUserList(uiContext, container);
+
+                    GetAllMessages(messageContent, container, uiContext);
+
+
+                    FirstTime = false;
+                }
+                else
+                {
+                    // Detect if OnlineUsers changed
+                    if (container?.Persons?.Count > OnlineUsers.UserList.Count || container?.Persons?.Count < OnlineUsers.UserList.Count)
+                    {
+                        ChangeOnlineUserList(uiContext, container, Client.TextFromServer);
+                    }
+                    else
+                    {
+                        AddNewMessage(uiContext, messageContent, Client.TextFromServer);
+                    }
+
+
+
+                }
+
+
+
+
+            }
+
         }
     }
 }

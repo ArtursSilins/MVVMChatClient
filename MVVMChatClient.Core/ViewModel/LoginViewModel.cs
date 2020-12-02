@@ -1,227 +1,112 @@
 ﻿using MVVMChatClient.Core.Interfaces;
 using MVVMChatClient.Core.Model;
+using MVVMChatClient.Core.Model.ClientComunication;
 using MVVMChatClient.Core.ViewModel.BaseClass;
 using MVVMChatClient.Core.ViewModel.Commands;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MVVMChatClient.Core.ViewModel
 {
-    public class LoginViewModel : ViewModelBase, ILoginViewModel
+    public class LogInViewModel : ViewModelBase, ILogInViewModel
     {
-
         private IWindowsViewModel _windowsViewModel;
         private IPerson _person;
+        private IUserValidationData _userValidationData;
         public ICommand SetView { get; private set; }
         public ICommand SetPicFamele { get; private set; }
         public ICommand SetPicMale { get; private set; }
         public ICommand AddPic { get; private set; }
+        public ICommand GetData { get; set; }
+        private ICommand Login { get; set; }
 
+        private string userName;
 
-        public bool firstTime { get; set; }
-        private bool IsPicture { get; set; }
-        public static bool IsNameSet { get; set; }
-
-        private string nameText;
-
-        public string NameText
+        public string UserName
         {
             get
             {
-                            
-                return nameText;
+                return userName;
             }
             set
             {
-                nameText = value;
-
-                if (value.Length > 0)
-                    IsNameSet = true;
-                else
-                    IsNameSet = false;
-
-                   
-                OnPropertyChanged(nameof(NameText));
-
+                userName = value;
+                OnPropertyChanged(nameof(UserName));
             }
         }
-        private bool male;
+        private string pasword;
 
-        private bool noText;
-
-        public bool NoText
+        public string Pasword
         {
             get
             {
-                return noText;
+                return pasword;
             }
             set
             {
-                noText = value;
-                OnPropertyChanged(nameof(NoText));
+                pasword = value;
+                OnPropertyChanged(nameof(Pasword));
             }
         }
-
-        private string arrowVisibility;
-
-        public string ArrowVisibility
-        {
-            get
-            {
-                return arrowVisibility;
-            }
-            set
-            {
-                arrowVisibility = value;
-                OnPropertyChanged(nameof(ArrowVisibility));
-            }
-        }
-
-
-        public bool Male
-        {
-            get
-            {
-                if (firstTime == true)
-                    return male = true;
-                else
-                    return male;
-            }
-            set
-            {
-                firstTime = false;
-
-                male = value;
-                OnPropertyChanged(nameof(Male));
-            }
-        }
-        private bool female;
-        public bool Female
-        {
-            get
-            {
-                return female;
-            }
-            set
-            {
-                firstTime = false;
-
-                female = value;
-                OnPropertyChanged(nameof(Female));
-
-                if (!IsPicture)
-                    profilePicture = Gender.Female;
-            }
-        }
-
-        private string profilePicture;
-        public string ProfilePicture
-        {
-            get
-            {
-                if (profilePicture == null)
-                    profilePicture = Gender.Male;
-              
-                return profilePicture;
-            }
-            set
-            {                
-                profilePicture = value;
-                if (profilePicture != "")
-                    OnPropertyChanged(nameof(ProfilePicture));
-                else
-                    IsPicture = false;
-                   
-            }
-        }
-        
-        public LoginViewModel(IWindowsViewModel windowsViewModel,
+        public LogInViewModel(IWindowsViewModel windowsViewModel,
             IChatting chatting,
             IMessageContent messageContent,
             IPerson person,
             ITcpEndPoint tcpEndPoint,
             IJsonContainer container,
-            IUserContent userContent)
+            IUserContent userContent,
+            IUserValidationData userValidationData)
         {
-            _person = person;
+            //_person = person;
             _windowsViewModel = windowsViewModel;
+            _userValidationData = userValidationData;
 
-            firstTime = true;
-            IsNameSet = false;
-            ArrowVisibility = "Hidden";
+            //firstTime = true;
+            //IsNameSet = false;
+            //ArrowVisibility = "Hidden";
 
-            SetView = new ParameterRelayCommand(_windowsViewModel, GetUserData, chatting.Receiving,
-                this, messageContent, tcpEndPoint, container, NoNameCheck);
+            GetData = new RelayCommand(GetAppruval);
 
-            SetPicFamele = new RelayCommand(SetDefoultFamelePic);
-            SetPicMale = new RelayCommand(SetDefoultMalePic);
-            AddPic = new RelayCommand(AddPicture);
+            //SetView = new LogInRelayCommand(_windowsViewModel, GetUserData, chatting.Receiving,
+            //    this, messageContent, tcpEndPoint, container);
 
+            //SetPicFamele = new RelayCommand(SetDefoultFamelePic);
+            //SetPicMale = new RelayCommand(SetDefoultMalePic);
+            //AddPic = new RelayCommand(AddPicture);
         }
+        private void GetAppruval()
+        {
+            _userValidationData.UserName = UserName;
+            _userValidationData.Pasword = Pasword;
 
-        public void SetDefoultFamelePic()
-        {
-            if (!IsPicture)
-                ProfilePicture = Gender.Female;
-        }
-        public void SetDefoultMalePic()
-        {
-            if (!IsPicture)
-                ProfilePicture = Gender.Male;
-        }
-        private void AddPicture()
-        {
-            IsPicture = true;
 
-            ProfilePicture = FilePath.Get();
-            UserInfo.AddedPicture = ProfilePicture;
-        }
+            if (!Client.IsConnected)
+                Client.Connect(null);
 
-        private void NoNameCheck()
-        {
-            if (_person.Name == "" || _person.Name == null)
+            if (Client.IsConnected)
             {
-                ArrowVisibility = "Visible";
-                NoText = true;
-                NoText = false;
-            }              
-            else
-                NoText = false;
+                var messageInBytes = ConverData.ToSend(_userValidationData);
+
+                Client.SendAsync(messageInBytes);
+
+                Client.ReceiveAsync(TcpSocket.tcpSocket);
+                Client.ReceiveDone.WaitOne();
+
+                var apruvalMessage = ConverData.ToReceiv<UserValidationData>(Client.TextFromServer);
+
+                //if( )
+            }
+
         }
         private void GetUserData()
         {
-          
-            _person.Name = NameText;
-            _person.Male = Male;
-            _person.Female = Female;
 
-            if (UserInfo.AddedPicture != null)
-            {
-                _person.Pic = ConvertImage.imageConverter.ImageToByte(UserInfo.AddedPicture);
-            }
-
-            UserInfo.Name = NameText;
-
-            if (Male)
-            {
-                UserGender.YourGender = Gender.Male;
-                UserInfo.DefaultPicture = Gender.Male;
-                
-            }
-            if (Female)
-            {
-                UserGender.YourGender = Gender.Female;
-                UserInfo.DefaultPicture = Gender.Female;
-            }
-
-
-            PersonList.PersonInfo.Add(_person);
-            
-        }      
-        public void Disconnect()
-        {
-        //    TcpSocket.tcpSocket.Disconnect(true); 
         }
     }
 }
