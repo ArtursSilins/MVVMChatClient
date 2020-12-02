@@ -44,12 +44,6 @@ namespace MVVMChatClient.Core.Model
 
                 ConnectingToServer();
 
-                //string con = "Connected";
-                //var conByte = Encoding.UTF8.GetBytes(con);
-
-                //TcpSocket.tcpSocket.BeginSend(conByte, 0, conByte.Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
-                //connectDone.WaitOne();
-
                 TcpSocket.tcpSocket.BeginSend(ConverData.ToSend(PersonList.GetPersonInfo()), 0, ConverData.ToSend(PersonList.GetPersonInfo()).Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
                 connectDone.WaitOne();
 
