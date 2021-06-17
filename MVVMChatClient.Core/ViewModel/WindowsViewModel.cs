@@ -3,6 +3,8 @@ using MVVMChatClient.Core.Model;
 using MVVMChatClient.Core.ViewModel.BaseClass;
 using MVVMChatClient.Core.ViewModel.Commands;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MVVMChatClient.Core.ViewModel
@@ -28,35 +30,45 @@ namespace MVVMChatClient.Core.ViewModel
 
             IUserContent userContent = Factory.CreateUserContent();
 
+            IUserValidationData userValidationData = new UserValidationData();
+
             ViewModels = new List<object>
             {
-                new SignUpViewModel(this, chatting, messageContent, person, TcpEndPoint, container, userContent),
+                new SignInViewModel(this, chatting, messageContent, person, TcpEndPoint, container, userContent),
+                new LogInViewModel(this, chatting, messageContent, person, TcpEndPoint, container, userContent, userValidationData),
                 new ChatViewModel(messageContent, this)
             };
 
-            currentView = ViewModels[0];
+            currentView = ViewModels[1];
 
         }
 
         public void ChangeView(int view)
         {
-            switch (view)
+            var t = Task.Run(async delegate
             {
-                case 0:
+                switch (view)
+                {
+                    case 0:
+                        await Task.Delay(600);
+                        CurrentView = ViewModels[view];
+                        break;
 
-                    CurrentView = ViewModels[view];
-                    break;
+                    case 1:
+                        await Task.Delay(600);
+                        CurrentView = ViewModels[view];
+                        break;
 
-                case 1:
+                    case 2:
+                        if (!Connection.Status)
+                            return;
 
-                    if (!Connection.Status)
-                        return;
+                        await Task.Delay(600);
+                        CurrentView = ViewModels[view];
+                        break;
+                }
 
-                    CurrentView = ViewModels[view];
-                    break;
-            }
-
-                                     
+            });
         }
 
         private object currentView;

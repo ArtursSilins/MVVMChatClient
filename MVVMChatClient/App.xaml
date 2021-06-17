@@ -4,24 +4,14 @@
              xmlns:Core="clr-namespace:MVVMChatClient.Core.ViewModel;assembly=MVVMChatClient.Core"
              xmlns:local="clr-namespace:MVVMChatClient"
              xmlns:DataStore="clr-namespace:Expression.Blend.DataStore.DataStore" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="MVVMChatClient.App"
-             StartupUri="MainWindow.xaml">
+             StartupUri="View/MainWindow.xaml">
     <Application.Resources>
       
-
         <ResourceDictionary >
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources.xaml"/>
-                
+                <ResourceDictionary Source="View/Resource/Resources.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <!--<DataTemplate DataType="{x:Type Core:LoginViewModel}">
-                <local:Login/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type Core:ChatViewModel}">
-                <local:Chat/>
-            </DataTemplate>-->
         </ResourceDictionary>
-
-       
 
     </Application.Resources>
 </Application>

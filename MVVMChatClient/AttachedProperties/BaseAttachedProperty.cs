@@ -15,7 +15,7 @@ namespace MVVMChatClient
         public static Parent Instance { get; private set; } = new Parent();
 
         public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.RegisterAttached("Value", typeof(Property), typeof(BaseAttachedProperty<Parent, Property>), new PropertyMetadata(new PropertyChangedCallback(OnValuePropertyChange)));
+            DependencyProperty.RegisterAttached("Value", typeof(Property), typeof(BaseAttachedProperty<Parent, Property>), new PropertyMetadata(default(Property), new PropertyChangedCallback(OnValuePropertyChange)));
         private static void OnValuePropertyChange(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             Instance.OnValueChanged(d, e);
@@ -31,5 +31,7 @@ namespace MVVMChatClient
             d.SetValue(ValueProperty, value);
         }
         public virtual void OnValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e) { }
+
     }
+
 }

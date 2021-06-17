@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
+using System.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,12 +20,13 @@ namespace MVVMChatClient.Core.ViewModel
         private IWindowsViewModel _windowsViewModel;
         private IPerson _person;
         private IUserValidationData _userValidationData;
-        public ICommand SetView { get; private set; }
+        public ICommand LogInCommand { get; private set; }
         public ICommand SetPicFamele { get; private set; }
         public ICommand SetPicMale { get; private set; }
         public ICommand AddPic { get; private set; }
         public ICommand GetData { get; set; }
-        private ICommand Login { get; set; }
+        public ICommand SwitchToSignIn { get; set; }
+        public static bool FirstTimeLogin { get; set; }
 
         private string userName;
 
@@ -40,18 +42,18 @@ namespace MVVMChatClient.Core.ViewModel
                 OnPropertyChanged(nameof(UserName));
             }
         }
-        private string pasword;
+        private SecureString password;
 
-        public string Pasword
+        public SecureString Password
         {
             get
             {
-                return pasword;
+                return password;
             }
             set
             {
-                pasword = value;
-                OnPropertyChanged(nameof(Pasword));
+                password = value;
+                OnPropertyChanged(nameof(Password));
             }
         }
         public LogInViewModel(IWindowsViewModel windowsViewModel,
@@ -63,50 +65,81 @@ namespace MVVMChatClient.Core.ViewModel
             IUserContent userContent,
             IUserValidationData userValidationData)
         {
-            //_person = person;
+            _person = person;
             _windowsViewModel = windowsViewModel;
             _userValidationData = userValidationData;
 
             //firstTime = true;
+
+            //////////////////Vecaic variant priekš sarkanās bultas
             //IsNameSet = false;
             //ArrowVisibility = "Hidden";
+            ///////////////
 
-            GetData = new RelayCommand(GetAppruval);
+            //GetData = new RelayCommand(GetAppruval);//already is excecuted in LogInCommand
+            SwitchToSignIn = new RelayCommand(ToSignIn);
 
-            //SetView = new LogInRelayCommand(_windowsViewModel, GetUserData, chatting.Receiving,
-            //    this, messageContent, tcpEndPoint, container);
+            LogInCommand = new LogInRelayCommand(Login, _windowsViewModel, GetAppruval, chatting.Receiving2,
+                this, messageContent, tcpEndPoint, container);
+
+            
 
             //SetPicFamele = new RelayCommand(SetDefoultFamelePic);
             //SetPicMale = new RelayCommand(SetDefoultMalePic);
             //AddPic = new RelayCommand(AddPicture);
         }
+        private void Login(object parameter)
+        {
+            
+        }
+        private void ToSignIn()
+        {
+            _windowsViewModel.ChangeView(0);
+        }
+
         private void GetAppruval()
         {
-            _userValidationData.UserName = UserName;
-            _userValidationData.Pasword = Pasword;
+
+            _person.Female = false;
+            _person.Male = true;
+            _person.Name = UserName;
+
+            UserGender.YourGender = Gender.Male;
+            UserInfo.DefaultPicture = Gender.Male;
+
+            SwitchToSignIn = new RelayCommand(ToSignIn);
+
+            PersonList.PersonInfo.Add(_person);
+
+            //_userValidationData.UserName = UserName;
+            ////_userValidationData.Pasword = Password;
 
 
-            if (!Client.IsConnected)
-                Client.Connect(null);
+            //if (!Client.IsConnected)
+            //    Client.Connect(null);
 
-            if (Client.IsConnected)
-            {
-                var messageInBytes = ConverData.ToSend(_userValidationData);
+            //if (Client.IsConnected)
+            //{
+            //    var messageInBytes = ConverData.ToSend(_userValidationData);
 
-                Client.SendAsync(messageInBytes);
+            //    Client.SendAsync(messageInBytes);
 
-                Client.ReceiveAsync(TcpSocket.tcpSocket);
-                Client.ReceiveDone.WaitOne();
+            //    Client.ReceiveAsync(TcpSocket.tcpSocket);
+            //    Client.ReceiveDone.WaitOne();
 
-                var apruvalMessage = ConverData.ToReceiv<UserValidationData>(Client.TextFromServer);
+            //    var apruvalMessage = ConverData.ToReceiv<UserValidationData>(Client.TextFromServer);
 
-                //if( )
-            }
+            //    //if( )
+            //}
 
         }
         private void GetUserData()
         {
 
+        }
+        public void Disconnect()
+        {
+            //    TcpSocket.tcpSocket.Disconnect(true); 
         }
     }
 }

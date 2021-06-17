@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient\App.xaml
-11-1606180042
+12463654121
 
-231633159955
+28259330544
 211998055244
-Chat.xaml;Login.xaml;DataStore\DataStore\DataStore.xaml;MainWindow.xaml;MessageItemControl.xaml;MessageListContainer.xaml;MessagePicture.xaml;Resources.xaml;UserSideWall.xaml;UsersOnlineControl.xaml;UsersOnlineListContainer.xaml;
+View\ChattingArea\Chat.xaml;View\LogInAndSignIn\Login.xaml;View\LogInAndSignIn\SignIn.xaml;DataStore\DataStore\DataStore.xaml;View\MainWindow.xaml;View\ChattingArea\Messages\MessageItemControl.xaml;View\ChattingArea\Messages\MessageListContainer.xaml;View\ChattingArea\Messages\MessagePicture.xaml;View\Resource\Resources.xaml;View\ChattingArea\SideWall\UserSideWall.xaml;View\ChattingArea\SideWall\UsersOnlineControl.xaml;View\ChattingArea\SideWall\UsersOnlineListContainer.xaml;
 
-True
+False
 

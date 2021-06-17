@@ -8,7 +8,7 @@ namespace MVVMChatClient.Core.Model
 {
     public static class Gender
     {
-        public const string Male = "Images/Male.jpg";
-        public const string Female = "Images/Female.jpg";
+        public const string Male = "/View/Images/Male.jpg";
+        public const string Female = "/View/Images/Female.jpg";
     }
 }

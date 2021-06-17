@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MVVMChatClient.Core.Interfaces
 {
-    public interface ISignUpViewModel
+    public interface ISignInViewModel
     {
         string NameText { get; set; }       
         bool Male  { get; set; }                   

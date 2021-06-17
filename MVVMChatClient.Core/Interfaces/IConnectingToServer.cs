@@ -9,8 +9,8 @@ namespace MVVMChatClient.Core.Interfaces
 {
     public interface IChatting
     {
-        void Receiving(IWindowsViewModel windowsViewModel, ISignUpViewModel loginViewModel, IMessageContent messageContent,
+        void Receiving(IWindowsViewModel windowsViewModel, ISignInViewModel loginViewModel, IMessageContent messageContent,
             ITcpEndPoint tcpEndPoint, IJsonContainer container);
-        
+        void Receiving2(IWindowsViewModel windowsViewModel, IMessageContent messageContent, IJsonContainer container);
     }
 }

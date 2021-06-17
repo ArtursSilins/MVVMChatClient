@@ -68,41 +68,52 @@
     </ApplicationDefinition>
     <Compile Include="AlertMessages.cs" />
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
-    <Compile Include="Chat.xaml.cs">
+    <Compile Include="AttachedProperties\MonitorPasswordBoxProperty.cs" />
+    <Compile Include="AttachedProperties\PasswordBoxProperties.cs" />
+    <Compile Include="ValueConverters\BaseValueConverter.cs" />
+    <Compile Include="ValueConverters\BoolenToVisibilityConverter.cs" />
+    <Compile Include="View\ChattingArea\Chat.xaml.cs">
       <DependentUpon>Chat.xaml</DependentUpon>
     </Compile>
     <Compile Include="FilePath.cs" />
     <Compile Include="ImageConverter.cs" />
-    <Compile Include="Login.xaml.cs">
+    <Compile Include="View\LogInAndSignIn\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LogInAndSignIn\SignIn.xaml.cs">
+      <DependentUpon>SignIn.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataStore\DataStore\DataStore.xaml.cs">
       <DependentUpon>DataStore.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MessageItemControl.xaml.cs">
+    <Compile Include="View\ChattingArea\Messages\MessageItemControl.xaml.cs">
       <DependentUpon>MessageItemControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MessageListContainer.xaml.cs">
+    <Compile Include="View\ChattingArea\Messages\MessageListContainer.xaml.cs">
       <DependentUpon>MessageListContainer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MessagePicture.xaml.cs">
+    <Compile Include="View\ChattingArea\Messages\MessagePicture.xaml.cs">
       <DependentUpon>MessagePicture.xaml</DependentUpon>
     </Compile>
     <Compile Include="AttachedProperties\ScrollHelper.cs" />
-    <Compile Include="UserSideWall.xaml.cs">
+    <Compile Include="View\ChattingArea\SideWall\UserSideWall.xaml.cs">
       <DependentUpon>UserSideWall.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UsersOnlineControl.xaml.cs">
+    <Compile Include="View\ChattingArea\SideWall\UsersOnlineControl.xaml.cs">
       <DependentUpon>UsersOnlineControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UsersOnlineListContainer.xaml.cs">
+    <Compile Include="View\ChattingArea\SideWall\UsersOnlineListContainer.xaml.cs">
       <DependentUpon>UsersOnlineListContainer.xaml</DependentUpon>
     </Compile>
-    <Page Include="Chat.xaml">
+    <Page Include="View\ChattingArea\Chat.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Login.xaml">
+    <Page Include="View\LogInAndSignIn\Login.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LogInAndSignIn\SignIn.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -110,7 +121,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -118,35 +129,35 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MessageItemControl.xaml">
+    <Page Include="View\ChattingArea\Messages\MessageItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MessageListContainer.xaml">
+    <Page Include="View\ChattingArea\Messages\MessageListContainer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MessagePicture.xaml">
+    <Page Include="View\ChattingArea\Messages\MessagePicture.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources.xaml">
+    <Page Include="View\Resource\Resources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserSideWall.xaml">
+    <Page Include="View\ChattingArea\SideWall\UserSideWall.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UsersOnlineControl.xaml">
+    <Page Include="View\ChattingArea\SideWall\UsersOnlineControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UsersOnlineListContainer.xaml">
+    <Page Include="View\ChattingArea\SideWall\UsersOnlineListContainer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -168,6 +179,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="DataStore\DataStore\DataStore.xsd" />
     <None Include="packages.config" />
@@ -182,37 +194,28 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\background_light_dark_surface-679706.jpg" />
+    <Resource Include="View\Images\background_light_dark_surface-679706.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\green-absrtact-circle.jpg" />
+    <Resource Include="View\Images\bluer background.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\bluer background.jpg" />
+    <Resource Include="View\Images\D4sgqo.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\D4sgqo.jpg" />
+    <Resource Include="View\Images\figure_colorful_bright_background_blur_46937_1280x720.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Colton-1855-World-Telegraph-Lines.jpg" />
+    <Resource Include="View\Images\background-wallpaper-texture-2.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\grass_blur_background_plant-644363.jpg" />
+    <Resource Include="View\Images\background-typography-4.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\figure_colorful_bright_background_blur_46937_1280x720.jpg" />
+    <Resource Include="View\Images\Male.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\background-wallpaper-texture-2.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\background-typography-4.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Male.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Female.jpg" />
+    <Resource Include="View\Images\Female.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MVVMChatClient.Core\MVVMChatClient.Core.csproj">
@@ -221,16 +224,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\dark-green-wall-texture-vintage-background.jpg" />
+    <Resource Include="View\Images\dark-green-wall-texture-vintage-background.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\81jZSBNSoWL._SL1500_.jpg" />
+    <Resource Include="View\Images\81jZSBNSoWL._SL1500_.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\light-gray-wood-flooring-smart-kids-educational-club-light-wood-crossword-light-wood-texture.jpg" />
+    <Resource Include="View\Images\light-gray-wood-flooring-smart-kids-educational-club-light-wood-crossword-light-wood-texture.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Embossment-triangular-blue-background-vector-04.jpg" />
+    <Resource Include="View\Images\Embossment-triangular-blue-background-vector-04.jpg" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
