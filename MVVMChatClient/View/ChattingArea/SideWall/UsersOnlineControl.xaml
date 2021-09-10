@@ -3,8 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+             xmlns:local="clr-namespace:MVVMChatClient"
+
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Height="70" Width="250">
+             d:DesignHeight="70" d:DesignWidth="234" Height="70" Width="231">
 
     <UserControl.Resources >
         <Storyboard x:Key="OnMouseEnter1">
@@ -15,7 +19,51 @@
             <ColorAnimation To="#FFD8D8D8" Duration="0:0:0.3" Storyboard.TargetName="border1" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" />
             <!--<ColorAnimation To="#5cb863" Duration="0:0:0.3" Storyboard.TargetName="border2" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" />-->
         </Storyboard>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ButtonStyle2" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="Transparent"/>
+                            </Trigger>
+                           
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </UserControl.Resources>
+
     <UserControl.Triggers >
         <EventTrigger RoutedEvent="MouseEnter" >
             <BeginStoryboard Storyboard="{StaticResource OnMouseEnter1}"/>
@@ -25,8 +73,18 @@
                              Storyboard="{StaticResource OnMouseLeave1}"/>
         </EventTrigger>
     </UserControl.Triggers>
-   
-    <Grid Margin="0 2 0 2" >
+
+    <Grid >
+
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="MouseLeftButtonDown">
+                <i:InvokeCommandAction Command="{Binding DataContext._PrivateChatCommand,
+                    Delay=1000,
+                    RelativeSource={RelativeSource AncestorType={x:Type local:UsersOnlineListContainer}}}"
+                                       CommandParameter="{Binding}"/>
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
@@ -38,14 +96,14 @@
         </Grid.ColumnDefinitions>
 
 
-        <Border x:Name="border2"
+        <Border x:Name="border2" 
                  Grid.RowSpan="3"
                  Grid.ColumnSpan="2"
-                 Margin="0 2 80 2"
+                 Margin="0 2 38 2"
                  Background="#5cb863">
-            
-        
-        <Border x:Name="border1" 
+
+
+            <Border x:Name="border1" 
                 Grid.RowSpan="3"
                 Grid.ColumnSpan="2"
                 Margin="0 6 0 6"              
@@ -61,14 +119,14 @@
                            MaxWidth="160"
                            Margin="0, 0, 0, 0"
                            Padding="5 5 5 5">
-                       
+
                 </TextBlock>
 
             </Border>
         </Border>
 
         <Ellipse 
-                 Margin="-10 0 0 0"
+                 Margin="40 0 0 0"
                  Height="65"
                  Width="65"
                  Grid.Column="1" Grid.ColumnSpan="3"

@@ -153,8 +153,8 @@ namespace MVVMChatClient.Core.ViewModel
             IsNameSet = false;
             ArrowVisibility = "Hidden";
 
-            SetView = new ParameterRelayCommand(_windowsViewModel, GetUserData, chatting.Receiving,
-                this, messageContent, tcpEndPoint, container, NoNameCheck);
+            //SetView = new ParameterRelayCommand(_windowsViewModel, GetUserData, chatting.Receiving,
+              //  this, messageList, messageContent, tcpEndPoint, container, NoNameCheck);
 
             SetPicFamele = new RelayCommand(SetDefoultFamelePic);
             SetPicMale = new RelayCommand(SetDefoultMalePic);

@@ -7,3 +7,12 @@ C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatCli
 C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatClient.Core.dll
 C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatClient.Core.pdb
 C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatClient.Core.csprojAssemblyReference.cache
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient.Core\bin\Debug\MVVMChatClient.Core.dll
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient.Core\bin\Debug\MVVMChatClient.Core.pdb
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient.Core\bin\Debug\Newtonsoft.Json.dll
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient.Core\bin\Debug\Newtonsoft.Json.xml
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatClient.Core.csproj.CoreCompileInputs.cache
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatClient.Core.csproj.CopyComplete
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatClient.Core.dll
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatClient.Core.pdb
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient.Core\obj\Debug\MVVMChatClient.Core.csprojAssemblyReference.cache

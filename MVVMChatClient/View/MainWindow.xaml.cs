@@ -37,7 +37,7 @@ namespace MVVMChatClient
             MVVMChatClient.Core.Interfaces.IImageConverter imageConverter = new ImageConverter();
             MVVMChatClient.Core.Model.ConvertImage.imageConverter = imageConverter;
 
-            DataContext = new WindowsViewModel();
+            //DataContext = new WindowsViewModel();
 
             Maximized = false;
         }

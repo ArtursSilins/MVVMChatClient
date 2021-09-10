@@ -10,7 +10,6 @@ namespace MVVMChatClient.Core.Model
 {
     public class JsonContainer : IJsonContainer
     {
-       
         public ObservableCollection<MessageContent> Messages { get; set; }
         public List<Person> Persons { get; set; }
         public CurrentPersonId CurrentPersonId { get; set; }

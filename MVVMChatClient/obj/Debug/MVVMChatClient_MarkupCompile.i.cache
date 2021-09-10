@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient\obj\Debug\
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\obj\Debug\
 MVVMChatClient
 none
 false
 DEBUG;TRACE
-C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient\App.xaml
-12463654121
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\App.xaml
+131128650161
 
-28259330544
-211998055244
-View\ChattingArea\Chat.xaml;View\LogInAndSignIn\Login.xaml;View\LogInAndSignIn\SignIn.xaml;DataStore\DataStore\DataStore.xaml;View\MainWindow.xaml;View\ChattingArea\Messages\MessageItemControl.xaml;View\ChattingArea\Messages\MessageListContainer.xaml;View\ChattingArea\Messages\MessagePicture.xaml;View\Resource\Resources.xaml;View\ChattingArea\SideWall\UserSideWall.xaml;View\ChattingArea\SideWall\UsersOnlineControl.xaml;View\ChattingArea\SideWall\UsersOnlineListContainer.xaml;
+30-80303381
+21-1525807058
+View\ChattingArea\PrivateChat.xaml;View\ChattingArea\PublicChat.xaml;View\LogInAndSignIn\Login.xaml;View\LogInAndSignIn\SignIn.xaml;DataStore\DataStore\DataStore.xaml;View\MainWindow.xaml;View\ChattingArea\Messages\MessageItemControl.xaml;View\ChattingArea\Messages\MessageListContainer.xaml;View\ChattingArea\Messages\MessagePicture.xaml;View\Resource\Resources.xaml;View\ChattingArea\SideWall\UserSideWall.xaml;View\ChattingArea\SideWall\UsersOnlineControl.xaml;View\ChattingArea\SideWall\UsersOnlineListContainer.xaml;
 
-False
+True
 

@@ -1,12 +1,14 @@
-﻿C:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient\obj\Debug\GeneratedInternalTypeHelper.g.cs
-FC:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient\App.xaml;;
-FC:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient\View\ChattingArea\Chat.xaml;;
-FC:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient\View\LogInAndSignIn\Login.xaml;;
-FC:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient\DataStore\DataStore\DataStore.xaml;;
-FC:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient\View\MainWindow.xaml;;
-FC:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient\View\ChattingArea\Messages\MessageListContainer.xaml;;
-FC:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient\View\ChattingArea\Messages\MessagePicture.xaml;;
-FC:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient\View\Resource\Resources.xaml;;
-FC:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient\View\ChattingArea\SideWall\UserSideWall.xaml;;
-FC:\Users\X\Source\Repos\MVVMChatClient\MVVMChatClient\View\ChattingArea\SideWall\UsersOnlineListContainer.xaml;;
+﻿C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\obj\Debug\GeneratedInternalTypeHelper.g.cs
+FC:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\App.xaml;;
+FC:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\View\ChattingArea\PrivateChat.xaml;;
+FC:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\View\ChattingArea\PublicChat.xaml;;
+FC:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\View\LogInAndSignIn\Login.xaml;;
+FC:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\DataStore\DataStore\DataStore.xaml;;
+FC:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\View\MainWindow.xaml;;
+FC:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\View\ChattingArea\Messages\MessageListContainer.xaml;;
+FC:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\View\ChattingArea\Messages\MessagePicture.xaml;;
+FC:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\View\Resource\Resources.xaml;;
+FC:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\View\ChattingArea\SideWall\UserSideWall.xaml;;
+FC:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\View\ChattingArea\SideWall\UsersOnlineControl.xaml;;
+FC:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\View\ChattingArea\SideWall\UsersOnlineListContainer.xaml;;
 

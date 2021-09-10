@@ -10,29 +10,37 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
+    
+
     <Grid >
         <Grid.Background>
             <SolidColorBrush Color="#FFBBBBBB" Opacity="0.9"/>
         </Grid.Background>
-        <ScrollViewer  VerticalScrollBarVisibility="Auto" >
-            <ItemsControl VerticalAlignment="Bottom" ItemsSource="{Binding Source={x:Static core:OnlineUsers.UserList}}" RenderTransformOrigin="0.5,1">
-                <i:Interaction.Behaviors>
-                    <ei:FluidMoveBehavior FloatAbove="False">
-                        <ei:FluidMoveBehavior.EaseY>
-                            <BackEase EasingMode="EaseInOut"/>
-                        </ei:FluidMoveBehavior.EaseY>
-                        <ei:FluidMoveBehavior.EaseX>
-                            <BackEase EasingMode="EaseInOut"/>
-                        </ei:FluidMoveBehavior.EaseX>
-                    </ei:FluidMoveBehavior>
-                </i:Interaction.Behaviors>
-                <ItemsControl.ItemTemplate>
+        <ListView Background="Transparent" ItemsSource="{Binding Source={x:Static core:OnlineUsers.UserList}}"
+            SelectedItem="{Binding DataContext.PrivateChatPerson,Mode=TwoWay,
+            RelativeSource={RelativeSource FindAncestor,
+            AncestorType=UserControl}}" SelectionMode="Single">
+            
+         <!--Get rid of blue selection border and background-->
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+          
+                <ListView.ItemTemplate>
                     <DataTemplate>
                         <local:UsersOnlineControl />
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl >
-        </ScrollViewer>
+                </ListView.ItemTemplate>
+            
+        </ListView>
     </Grid>
 
 </UserControl>

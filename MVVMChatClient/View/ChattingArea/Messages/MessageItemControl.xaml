@@ -21,7 +21,8 @@
         </Storyboard>
     </UserControl.Resources>
 
-    <Grid Height="Auto" Margin="4,0,10,0"  HorizontalAlignment="{Binding MessageAlignment}">
+    <Grid Height="Auto" Margin="4,0,10,0"
+          HorizontalAlignment="{Binding MessageAlignment}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
@@ -32,7 +33,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Border x:Name="border1" Visibility="{Binding MessagePictureVisibility}"
+        <Border x:Name="border1" Visibility="{Binding MessagePictureVisibility, FallbackValue='Hidden'}"
                 Margin="10 15 5 0"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Left" 

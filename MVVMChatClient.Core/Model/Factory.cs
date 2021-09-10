@@ -1,6 +1,7 @@
 ﻿using MVVMChatClient.Core.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +33,14 @@ namespace MVVMChatClient.Core.Model
         public static IJsonContainer CreateJsonContainer()
         {
             return new JsonContainer();
+        }
+        public static IJsonMessageContainer CreateMessageContainer()
+        {
+            return new JsonMessageContainer()
+            {
+                Switch = new ChatSwitch(),
+                Message = new MessageContent()
+            };
         }
         public static IDisconnectContent CreateDisconnectContent()
         {

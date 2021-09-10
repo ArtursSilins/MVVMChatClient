@@ -22,84 +22,10 @@ namespace MVVMChatClient.Core.Model
 
         private static StringBuilder TextFromServer { get; set; } 
 
-        public string PersonInfo { get; set; }
-        private ITcpEndPoint _tcpEndPoint;
         private IWindowsViewModel _windowsViewModel;
 
         private static ManualResetEvent receiveDone = new ManualResetEvent(false);
         private static ManualResetEvent connectDone = new ManualResetEvent(false);
-
-        public void Receiving(IWindowsViewModel windowsViewModel, ISignInViewModel loginViewModel, IMessageContent messageContent,
-            ITcpEndPoint tcpEndPoint, IJsonContainer container)
-        {
-
-            _tcpEndPoint = tcpEndPoint;
-            _windowsViewModel = windowsViewModel;
-
-            FirstTime = true;
-
-            IsConnected = true;
-
-            var uiContext = SynchronizationContext.Current;
-
-            Task.Run(() =>
-            {
-
-                ConnectingToServer();
-
-                TcpSocket.tcpSocket.BeginSend(ConverData.ToSend(PersonList.GetPersonInfo()), 0, ConverData.ToSend(PersonList.GetPersonInfo()).Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
-                connectDone.WaitOne();
-
-                while (IsConnected)
-                {
-                    _windowsViewModel.ChangeView(2);
-
-                    var textFromServer = ReceivData(uiContext, container);
-
-                    try
-                    {
-                        container = ConverData.ToReceiv<JsonContainer>(textFromServer.ToString());
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.Write(ex.ToString());
-                    }
-
-                    if (FirstTime)
-                    {
-                        if (container.CurrentPersonId != null)
-                            User.Id = container.CurrentPersonId.Id;
-
-                        AddToOnlineUserList(uiContext, container);
-
-                        GetAllMessages(messageContent, container, uiContext);
-
-
-                        FirstTime = false;
-                    }
-                    else
-                    {
-                        // Detect if OnlineUsers changed
-                        if (container?.Persons?.Count > OnlineUsers.UserList.Count || container?.Persons?.Count < OnlineUsers.UserList.Count)
-                        {
-                            ChangeOnlineUserList(uiContext, container, textFromServer.ToString());
-                        }
-                        else
-                        {
-                            AddNewMessage(uiContext, messageContent, textFromServer.ToString());
-                        }
-
-
-
-                    }
-
-
-
-
-                }
-            });
-
-        }
 
         private void SendCallback(IAsyncResult ar)
         {
@@ -120,6 +46,8 @@ namespace MVVMChatClient.Core.Model
         {
             foreach (var item in container.Messages)
             {
+                //messageTextEncryption
+
                 uiContext.Send(x => MessageList.Items.Add(messageContent.NewInstance(item)), null);
             }
         }
@@ -179,11 +107,34 @@ namespace MVVMChatClient.Core.Model
                 uiContext.Send(x => OnlineUsers.UserList.Insert(0, temporaryUserContent), null);
             }
         }
-        private void AddNewMessage(SynchronizationContext uiContext, IMessageContent messageContent, string textFromServer)
+        private void AddNewMessage(SynchronizationContext uiContext, IJsonMessageContainer jsonMessageContainer, string textFromServer)
         {
-            messageContent = ConverData.ToReceiv<MessageContent>(textFromServer);
+            jsonMessageContainer = ConverData.ToReceiv<JsonMessageContainer>(textFromServer);
 
-            uiContext.Send(x => MessageList.Items.Add(messageContent), null);
+
+            if (jsonMessageContainer.Switch.ChatMode == ChatMode.Public)
+            {
+                uiContext.Send(x => PublicChat.ChatListHolder.Content.Add(jsonMessageContainer.Message), null);
+
+                if(CurrentChatMode.Mode == ChatMode.Public)
+                {
+                    uiContext.Send(x => MessageList.Items.Add(jsonMessageContainer.Message), null);
+                }
+
+            }
+            else if(jsonMessageContainer.Switch.ChatMode == ChatMode.Private)
+            {
+                uiContext.Send(x => PrivateChat.ChatListHolder.AddToPersonChat(jsonMessageContainer.Message.Id,
+                    jsonMessageContainer.Message), null);
+
+                if(CurrentChatMode.Mode == ChatMode.Private)
+                {
+                    uiContext.Send(x => MessageList.Items.Add(jsonMessageContainer.Message), null);
+                }
+            }
+
+            //uiContext.Send(x => MessageList.Items.Add(jsonMessageContainer.Message), null);
+
         }
 
         private StringBuilder ReceivData(SynchronizationContext uiContext, IJsonContainer container)
@@ -296,8 +247,8 @@ namespace MVVMChatClient.Core.Model
         ///
 
 
-        public void Receiving2(IWindowsViewModel windowsViewModel,
-            IMessageContent messageContent, IJsonContainer container)
+        public void Receiving(IWindowsViewModel windowsViewModel,
+            IMessageContent messageContent, IJsonContainer container, IJsonMessageContainer jsonMessageContainer)
         {
 
             _windowsViewModel = windowsViewModel;
@@ -317,7 +268,7 @@ namespace MVVMChatClient.Core.Model
 
                     //while (IsConnected)
                     //{
-                        Chat(uiContext, container, messageContent);
+                        Chat(uiContext, container, messageContent, jsonMessageContainer);
                     //}
                 }
                 else
@@ -326,7 +277,7 @@ namespace MVVMChatClient.Core.Model
 
                     _windowsViewModel.ChangeView(1);
 
-                    // here some static error class witch binging to label under login panel to show message!
+                    // here some static error class witch binding to label under login panel to show message!
                 }
 
             });
@@ -361,7 +312,8 @@ namespace MVVMChatClient.Core.Model
 
             return userExists;
         }
-        private void Chat(SynchronizationContext uiContext, IJsonContainer container, IMessageContent messageContent)
+        private void Chat(SynchronizationContext uiContext, IJsonContainer container,
+            IMessageContent messageContent, IJsonMessageContainer jsonMessageContainer)
         {
             while (IsConnected)
             {
@@ -393,89 +345,12 @@ namespace MVVMChatClient.Core.Model
                 {
                     // Detect if OnlineUsers changed
                     if (container?.Persons?.Count > OnlineUsers.UserList.Count || container?.Persons?.Count < OnlineUsers.UserList.Count)
-                    {
                         ChangeOnlineUserList(uiContext, container, TextFromServer.ToString());
-                    }
                     else
-                    {
-                        AddNewMessage(uiContext, messageContent, TextFromServer.ToString());
-                    }
+                        AddNewMessage(uiContext, jsonMessageContainer, TextFromServer.ToString());
 
                 }
             }
         }
-        #region Backup
-        //public void Receiving2(IWindowsViewModel windowsViewModel,
-        //   IMessageContent messageContent, IJsonContainer container)
-        //{
-        //    FirstTime = true;
-
-        //    Client.IsConnected = true;
-
-        //    var uiContext = SynchronizationContext.Current;
-
-        //    string con = "Connected";
-        //    var conByte = Encoding.UTF8.GetBytes(con);
-
-        //    TcpSocket.tcpSocket.BeginSend(conByte, 0, conByte.Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
-        //    connectDone.WaitOne();
-
-        //    TcpSocket.tcpSocket.BeginSend(ConverData.ToSend(PersonList.GetPersonInfo()), 0, ConverData.ToSend(PersonList.GetPersonInfo()).Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
-        //    connectDone.WaitOne();
-
-        //    while (Client.IsConnected)
-        //    {
-        //        _windowsViewModel.ChangeView(1);
-
-        //        Client.TextFromServer = "";
-
-        //        //var textFromServer = ReceivData(uiContext, container);
-        //        Client.ReceiveAsync(TcpSocket.tcpSocket);
-        //        Client.ReceiveDone.WaitOne();
-
-        //        try
-        //        {
-        //            container = ConverData.ToReceiv<JsonContainer>(Client.TextFromServer);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.Write(ex.ToString());
-        //        }
-
-        //        if (FirstTime)
-        //        {
-        //            if (container.CurrentPersonId != null)
-        //                User.Id = container.CurrentPersonId.Id;
-
-        //            AddToOnlineUserList(uiContext, container);
-
-        //            GetAllMessages(messageContent, container, uiContext);
-
-
-        //            FirstTime = false;
-        //        }
-        //        else
-        //        {
-        //            // Detect if OnlineUsers changed
-        //            if (container?.Persons?.Count > OnlineUsers.UserList.Count || container?.Persons?.Count < OnlineUsers.UserList.Count)
-        //            {
-        //                ChangeOnlineUserList(uiContext, container, Client.TextFromServer);
-        //            }
-        //            else
-        //            {
-        //                AddNewMessage(uiContext, messageContent, Client.TextFromServer);
-        //            }
-
-
-
-        //        }
-
-
-
-
-        //    }
-
-        //}
-        #endregion
     }
 }

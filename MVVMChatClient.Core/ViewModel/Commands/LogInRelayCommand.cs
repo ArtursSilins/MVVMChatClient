@@ -13,16 +13,17 @@ namespace MVVMChatClient.Core.ViewModel.Commands
         public event EventHandler CanExecuteChanged;
         private Action<object> _login;
         private Action _execute2;
-        private Action<IWindowsViewModel, /*ILogInViewModel, */IMessageContent, /*ITcpEndPoint, */IJsonContainer> _execute3;
+        private Action<IWindowsViewModel, IMessageContent, IJsonContainer, IJsonMessageContainer> _execute3;
         private ILogInViewModel _userData;
         private IMessageContent _messageContent;
         private ITcpEndPoint _tcpEndPoint;
         private IJsonContainer _container;
+        private IJsonMessageContainer _jsonMessageContainer;
         private IWindowsViewModel _windowsViewModel;
 
 
-        public LogInRelayCommand(Action<object> login, IWindowsViewModel windowsViewModel, Action execute2, Action<IWindowsViewModel,/* ILogInViewModel, */IMessageContent,/* ITcpEndPoint, */IJsonContainer> execute3,
-            ILogInViewModel userData, IMessageContent messageContent, ITcpEndPoint tcpEndPoint, IJsonContainer container)
+        public LogInRelayCommand(Action<object> login, IWindowsViewModel windowsViewModel, Action execute2, Action<IWindowsViewModel, IMessageContent, IJsonContainer, IJsonMessageContainer> execute3,
+            ILogInViewModel userData, IMessageContent messageContent, ITcpEndPoint tcpEndPoint, IJsonContainer container, IJsonMessageContainer jsonMessageContainer)
         {
             _login = login;
             _execute2 = execute2;
@@ -30,7 +31,8 @@ namespace MVVMChatClient.Core.ViewModel.Commands
             _userData = userData;
             _messageContent = messageContent;
             _tcpEndPoint = tcpEndPoint;
-            _container = container; ;
+            _container = container;
+            _jsonMessageContainer = jsonMessageContainer;
             _windowsViewModel = windowsViewModel;
         }
 
@@ -43,7 +45,7 @@ namespace MVVMChatClient.Core.ViewModel.Commands
         {
             _login.Invoke(parameter);
             _execute2.Invoke();
-            _execute3.Invoke(_windowsViewModel, _messageContent, _container);
+            _execute3.Invoke(_windowsViewModel, _messageContent, _container, _jsonMessageContainer);
         }
     }
 }

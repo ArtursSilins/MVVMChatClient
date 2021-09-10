@@ -12,14 +12,18 @@ namespace MVVMChatClient.Core.Model
     {
         public static byte[] ToSend(object data)
         {
+            //messageEncript
+
             string DataToSend = JsonConvert.SerializeObject(data);
-            byte[] DataInBytes = Encoding.UTF8.GetBytes(MessageEncryption.Encrypt(DataToSend));
+            byte[] DataInBytes = Encoding.UTF8.GetBytes(DataEncryption.Encrypt(DataToSend));
 
             return DataInBytes;
         }       
         public static T ToReceiv<T>(string textFromServer)
         {
-            T objectFromText = JsonConvert.DeserializeObject<T>(MessageEncryption.Decrypt(textFromServer));
+            T objectFromText = JsonConvert.DeserializeObject<T>(DataEncryption.Decrypt(textFromServer));
+
+            //messageDecrypt
 
             return objectFromText;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -9,8 +10,9 @@ namespace MVVMChatClient.Core.Interfaces
 {
     public interface IChatting
     {
-        void Receiving(IWindowsViewModel windowsViewModel, ISignInViewModel loginViewModel, IMessageContent messageContent,
-            ITcpEndPoint tcpEndPoint, IJsonContainer container);
-        void Receiving2(IWindowsViewModel windowsViewModel, IMessageContent messageContent, IJsonContainer container);
+        void Receiving(IWindowsViewModel windowsViewModel,
+            IMessageContent messageContent,
+            IJsonContainer container,
+            IJsonMessageContainer jsonMessageContainer);
     }
 }

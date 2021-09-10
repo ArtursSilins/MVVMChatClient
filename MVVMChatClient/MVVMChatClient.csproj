@@ -70,10 +70,14 @@
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
     <Compile Include="AttachedProperties\MonitorPasswordBoxProperty.cs" />
     <Compile Include="AttachedProperties\PasswordBoxProperties.cs" />
+    <Compile Include="AttachedProperties\ScrollVerticalPreload.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
     <Compile Include="ValueConverters\BoolenToVisibilityConverter.cs" />
-    <Compile Include="View\ChattingArea\Chat.xaml.cs">
-      <DependentUpon>Chat.xaml</DependentUpon>
+    <Compile Include="View\ChattingArea\PrivateChat.xaml.cs">
+      <DependentUpon>PrivateChat.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ChattingArea\PublicChat.xaml.cs">
+      <DependentUpon>PublicChat.xaml</DependentUpon>
     </Compile>
     <Compile Include="FilePath.cs" />
     <Compile Include="ImageConverter.cs" />
@@ -105,7 +109,11 @@
     <Compile Include="View\ChattingArea\SideWall\UsersOnlineListContainer.xaml.cs">
       <DependentUpon>UsersOnlineListContainer.xaml</DependentUpon>
     </Compile>
-    <Page Include="View\ChattingArea\Chat.xaml">
+    <Page Include="View\ChattingArea\PrivateChat.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ChattingArea\PublicChat.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -194,18 +202,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="View\Images\background_light_dark_surface-679706.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="View\Images\bluer background.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="View\Images\D4sgqo.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="View\Images\figure_colorful_bright_background_blur_46937_1280x720.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="View\Images\background-wallpaper-texture-2.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -224,17 +220,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="View\Images\dark-green-wall-texture-vintage-background.jpg" />
+    <Resource Include="View\Images\wp9131742.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="View\Images\81jZSBNSoWL._SL1500_.jpg" />
+    <Resource Include="View\Images\download.jpg" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="View\Images\light-gray-wood-flooring-smart-kids-educational-club-light-wood-crossword-light-wood-texture.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="View\Images\Embossment-triangular-blue-background-vector-04.jpg" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

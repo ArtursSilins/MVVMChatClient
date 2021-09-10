@@ -11,9 +11,12 @@
     
         x:Class="MVVMChatClient.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="750" Width="1000" DataContext="{x:Type Core:WindowsViewModel}" WindowStyle="None" >
+        Title="MainWindow" Height="750" Width="1000" WindowStyle="None" >
 
 
+    <Window.DataContext>
+        <Core:WindowsViewModel/>
+    </Window.DataContext>
     <Window.Resources>
 
         <DataTemplate DataType="{x:Type Core:LogInViewModel}">
@@ -34,8 +37,12 @@
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type Core:ChatViewModel}">
-            <local:Chat/>
+        <DataTemplate DataType="{x:Type Core:PublicChatViewModel}">
+            <local:PublicChat/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Core:PrivateChatViewModel}">
+            <local:PrivateChat/>
         </DataTemplate>
 
     </Window.Resources>
@@ -47,7 +54,7 @@
     </z:Interaction.Triggers>
 
     <Window.Background>
-        <ImageBrush ImageSource="Images/figure_colorful_bright_background_blur_46937_1280x720.jpg"/>
+        <ImageBrush ImageSource="Images/download.jpg"/>
     </Window.Background>
 
     <Grid>

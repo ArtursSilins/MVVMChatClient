@@ -1,6 +1,7 @@
 ﻿using MVVMChatClient.Core.Interfaces;
 using MVVMChatClient.Core.Model;
 using MVVMChatClient.Core.Model.ClientComunication;
+using MVVMChatClient.Core.Model.EncryptAndDecrypt;
 using MVVMChatClient.Core.ViewModel.BaseClass;
 using MVVMChatClient.Core.ViewModel.Commands;
 using System;
@@ -62,6 +63,7 @@ namespace MVVMChatClient.Core.ViewModel
             IPerson person,
             ITcpEndPoint tcpEndPoint,
             IJsonContainer container,
+            IJsonMessageContainer jsonMessageContainer,
             IUserContent userContent,
             IUserValidationData userValidationData)
         {
@@ -69,18 +71,26 @@ namespace MVVMChatClient.Core.ViewModel
             _windowsViewModel = windowsViewModel;
             _userValidationData = userValidationData;
 
+            //test enconding
+            MessageTextEncryption.RSACreate();
+
+            //šitas strādā
+            string textEncrypted = MessageTextEncryption.Encrypt("Jipers Krīpers!");
+            string decrypt = MessageTextEncryption.Decrypt(textEncrypted);
+            //
+
             //firstTime = true;
 
             //////////////////Vecaic variant priekš sarkanās bultas
             //IsNameSet = false;
             //ArrowVisibility = "Hidden";
             ///////////////
-
+            
             //GetData = new RelayCommand(GetAppruval);//already is excecuted in LogInCommand
             SwitchToSignIn = new RelayCommand(ToSignIn);
 
-            LogInCommand = new LogInRelayCommand(Login, _windowsViewModel, GetAppruval, chatting.Receiving2,
-                this, messageContent, tcpEndPoint, container);
+            LogInCommand = new LogInRelayCommand(Login, _windowsViewModel, GetAppruval, chatting.Receiving,
+                this, messageContent, tcpEndPoint, container, jsonMessageContainer);
 
             
 
@@ -103,6 +113,8 @@ namespace MVVMChatClient.Core.ViewModel
             _person.Female = false;
             _person.Male = true;
             _person.Name = UserName;
+
+            UserInfo.Name = UserName;
 
             UserGender.YourGender = Gender.Male;
             UserInfo.DefaultPicture = Gender.Male;

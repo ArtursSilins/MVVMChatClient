@@ -19,8 +19,7 @@ namespace MVVMChatClient.Core.ViewModel.BaseClass
             PropertyChanged(this, new PropertyChangedEventArgs(name));
             
         }
-        
-       
+
     }
   
 }

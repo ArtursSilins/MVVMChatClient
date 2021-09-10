@@ -9,7 +9,20 @@ namespace MVVMChatClient.Core.Model
 {
     public class UserContent : IUserContent
     {
-        public string UserName { get; set; }
+        private string userName;
+        public string UserName
+        {
+            get
+            {
+                if(userName == null)
+                {
+
+                }
+                return userName;
+            }
+            set { userName = value; }
+        }
+
         public string UserPicture { get; set; }
         public int PersonId { get; set; }
         public int FontSize { get => Size(UserName.Length); }      
@@ -22,6 +35,10 @@ namespace MVVMChatClient.Core.Model
             //    return size = 15;
             //else
                 return size = 25;
+        }
+        private string CheckIfEmty(string value)
+        {
+            return "";
         }
     }
 }
