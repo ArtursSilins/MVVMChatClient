@@ -9,8 +9,105 @@
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
              xmlns:vm="clr-namespace:MVVMChatClient.Core.Model;assembly=MVVMChatClient.Core" 
              mc:Ignorable="d"
-             d:DesignHeight="750" d:DesignWidth="1000">
+             d:DesignHeight="750" d:DesignWidth="1000" >
+
+    
+    
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation
+                        Storyboard.TargetName="onlineUsers"
+                        Storyboard.TargetProperty="(local:UserSideWall.Opacity)" 
+                        From="0" To="1" Duration="0:0:0.2" >
+                    </DoubleAnimation>
+                    <DoubleAnimation
+                        Storyboard.TargetName="send"
+                        Storyboard.TargetProperty="(local:UserSideWall.Opacity)" 
+                        From="0" To="1" Duration="0:0:0.2" >
+                    </DoubleAnimation>
+
+                    <DoubleAnimation
+                        Storyboard.TargetName="messageList"
+                        Storyboard.TargetProperty="(local:UserSideWall.Opacity)" 
+                        From="0" To="1" Duration="0:0:0.2" >
+                    </DoubleAnimation>
+                    <DoubleAnimation
+                        Storyboard.TargetName="messageText"
+                        Storyboard.TargetProperty="(local:UserSideWall.Opacity)" 
+                        From="0" To="1" Duration="0:0:0.2" >
+                    </DoubleAnimation>
+
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="onlineUsers">
+                        <EasingDoubleKeyFrame KeyTime="0" Value="1000"/>
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+                    </DoubleAnimationUsingKeyFrames>
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="send">
+                        <EasingDoubleKeyFrame KeyTime="0" Value="1000"/>
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+                    </DoubleAnimationUsingKeyFrames>
+
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="messageList">
+                        <EasingDoubleKeyFrame KeyTime="0" Value="-1000"/>
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+                    </DoubleAnimationUsingKeyFrames>
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="messageText">
+                        <EasingDoubleKeyFrame KeyTime="0" Value="-1000"/>
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+
+
     <UserControl.Resources>
+        
+        <BeginStoryboard x:Key="UnloadAnimation">
+            <Storyboard>
+                <DoubleAnimation
+                        Storyboard.TargetName="onlineUsers"
+                        Storyboard.TargetProperty="(local:UserSideWall.Opacity)" 
+                        From="1" To="0" Duration="0:0:0.2" >
+                </DoubleAnimation>
+                <DoubleAnimation
+                        Storyboard.TargetName="send"
+                        Storyboard.TargetProperty="(local:UserSideWall.Opacity)" 
+                        From="1" To="0" Duration="0:0:0.2" >
+                </DoubleAnimation>
+
+                <DoubleAnimation
+                        Storyboard.TargetName="messageList"
+                        Storyboard.TargetProperty="(local:UserSideWall.Opacity)" 
+                        From="1" To="0" Duration="0:0:0.2" >
+                </DoubleAnimation>
+                <DoubleAnimation
+                        Storyboard.TargetName="messageText"
+                        Storyboard.TargetProperty="(local:UserSideWall.Opacity)" 
+                        From="1" To="0" Duration="0:0:0.2" >
+                </DoubleAnimation>
+                
+
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="onlineUsers">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1000"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="send">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1000"/>
+                </DoubleAnimationUsingKeyFrames>
+
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="messageList">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-1000"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="messageText">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-1000"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+        </BeginStoryboard>
 
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -260,6 +357,7 @@
         </Style>
 
     </UserControl.Resources>
+    
 
     <Grid >
 
@@ -299,22 +397,37 @@
         </Grid.ColumnDefinitions>
 
 
-        <local:MessageListContainer VerticalAlignment="Bottom"
+        <local:MessageListContainer x:Name="messageList" VerticalAlignment="Bottom"
                                     Grid.Row="1" Grid.RowSpan="9"
                            Grid.Column="1" Grid.ColumnSpan="9">
+
+            <local:MessageListContainer.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </local:MessageListContainer.RenderTransform>
+
         </local:MessageListContainer>
 
-        <local:UsersOnlineListContainer Grid.Row="4" Grid.RowSpan="6"
+        <local:UsersOnlineListContainer x:Name="onlineUsers" Grid.Row="2" Grid.RowSpan="8"
                                         Grid.Column="11" Grid.ColumnSpan="4">
+
+            <local:UsersOnlineListContainer.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </local:UsersOnlineListContainer.RenderTransform>
+
         </local:UsersOnlineListContainer>
 
-
-        <local:UserSideWall Grid.Column="11" Grid.ColumnSpan="4"
-                            Grid.Row="1" Grid.RowSpan="3">
-        </local:UserSideWall>
-
-
-        <StackPanel VerticalAlignment="Bottom"
+        <StackPanel x:Name="messageText"
+                    VerticalAlignment="Bottom"
                     Margin="0 0 0 10"
                     Grid.Column="1"
                     Grid.Row="7"
@@ -329,9 +442,18 @@
                  Style="{DynamicResource MessageTextBoxStyle}" >
             </TextBox>
 
+            <StackPanel.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </StackPanel.RenderTransform>
+
         </StackPanel>
 
-        <Button x:Name="Send"
+        <Button x:Name="send"
                 IsDefault="True"
                 IsEnabled="{Binding ElementName=message, Path=Text.Length}"
                 Grid.Row="11"
@@ -345,6 +467,15 @@
                 Style="{DynamicResource ButtonStyle1}"
                 Command="{Binding _SendCommand}"
                 >
+
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Button.RenderTransform>
 
         </Button>
 

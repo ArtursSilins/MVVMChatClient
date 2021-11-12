@@ -13,7 +13,7 @@ namespace MVVMChatClient.Core.Interfaces
         bool Male { get; set; }
         bool Female { get; set; }
         Socket Connection { get; set; }
-        int PersonId { get; set; }
+        string PersonId { get; set; }
         string PicturePath { get; set; }
         byte[] Pic { get; set; }
     }

@@ -10,8 +10,10 @@ namespace MVVMChatClient.Core.Interfaces
     {
         string UserName { get; set; }
         string UserPicture { get; set; }
-        int PersonId { get; set; }
+        string PersonId { get; set; }
         int FontSize { get;  }
+        int NotificationText { get; set; }
+        string NotificationVisibility { get; set; }
 
 
         int Size(int length);       

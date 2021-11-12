@@ -1,4 +1,5 @@
 ﻿using MVVMChatClient.Core.Interfaces;
+using MVVMChatClient.Core.Model.ChatSwitching;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,35 +10,24 @@ using System.Windows.Threading;
 
 namespace MVVMChatClient.Core.Model.PrivateChat
 {
-    public static class ChatListHolder
+    public class ChatListHolder:ChatSwitchBase
     {
-        public static Dictionary<int, ObservableCollection<IMessageContent>> Content { get; set; } =
-            new Dictionary<int, ObservableCollection<IMessageContent>>();
+        public static Dictionary<string, ObservableCollection<IMessageContent>> Content { get; set; } =
+            new Dictionary<string, ObservableCollection<IMessageContent>>();
 
-        private static DispatcherTimer Timer;
-        private static int UserID;
+        private static string UserID;
 
-
-        public static void GetPersonChat(int userID)
+        public static void GetPersonChatFirstTime(string userID)
         {
             UserID = userID;
 
-            Timer = new DispatcherTimer();
-            Timer = new DispatcherTimer(DispatcherPriority.SystemIdle);
-            Timer.Interval = TimeSpan.FromMilliseconds(800);
-            Timer.Tick += Timer_Tick;
-            Timer.Start();
-
-        }
-
-        private static void Timer_Tick(object sender, EventArgs e)
-        {
             if (Content.ContainsKey(UserID))
             {
-                foreach (var item in Content[UserID])
-                {
-                    MessageList.Items.Add(item);
-                }
+                AddTimer = new DispatcherTimer();
+                AddTimer = new DispatcherTimer(DispatcherPriority.SystemIdle);
+                AddTimer.Interval = TimeSpan.FromMilliseconds(5);
+                AddTimer.Tick += AddTimer_Tick;
+                AddTimer.Start();
             }
             else
             {
@@ -49,18 +39,75 @@ namespace MVVMChatClient.Core.Model.PrivateChat
                     MessageList.Items.Add(item);
                 }
             }
-
-            Timer.Stop();
         }
 
-        public static void AddToPersonChat(int userID, IMessageContent messageContent)
+        private static void AddTimer_Tick(object sender, EventArgs e)
         {
-            if (Content.ContainsKey(userID))
-                Content[userID].Add(messageContent);
-            else
-                Content.Add(userID,
-                new ObservableCollection<IMessageContent>() { messageContent.NewInstance(messageContent) });
+            AddFirstTimeMessages(Content[UserID]);
         }
+
+        public static void AddAdditionalMessages()
+        {
+            AddAdditionalTimer = new DispatcherTimer();
+            AddAdditionalTimer = new DispatcherTimer(DispatcherPriority.SystemIdle);
+            AddAdditionalTimer.Interval = TimeSpan.FromMilliseconds(5);
+            AddAdditionalTimer.Tick += AddAdditionalTimer_Tick;
+            AddAdditionalTimer.Start();
+        }
+
+        private static void AddAdditionalTimer_Tick(object sender, EventArgs e)
+        {
+
+            AddAdditionalMessages(Content[UserID]);
+
+        }
+
+        //public static void TestPopulateMessages()
+        //{
+        //    int count = 0;
+
+        //    ObservableCollection<IMessageContent> messages = new ObservableCollection<IMessageContent>();
+
+        //    while (count <= 100)
+        //    {
+        //        MessageContent messageContent = new MessageContent()
+        //        {
+        //            Id = 1,
+        //            MessageAlignment = "Right",
+        //            MessageColour = "White",
+        //            MessagePictureVisibility = "Hidden",
+        //            MessageText = count.ToString(),
+        //            MessageTime = "00:00",
+        //            Name = "Archi",
+        //            MessagePicture = Gender.Male
+        //        };
+
+        //        messages.Add(messageContent);
+
+        //        count++;
+        //    }
+        //    Content.Add(1, messages);
+
+        //}
+
+        public static void AddToPersonChat(List<string> userID, IMessageContent messageContent)
+        {
+            foreach (var item in userID)
+            {
+                if (item != User.Id)
+                {
+                    OnlineUsersList.Notifications.Id = item;
+
+                    if (Content.ContainsKey(item))
+                        Content[item].Add(messageContent);
+                    else
+                        Content.Add(item,
+                        new ObservableCollection<IMessageContent>() { messageContent.NewInstance(messageContent) });
+                }
+            }
+
+        }
+
         public static void RemovePrivateChat()
         {
 

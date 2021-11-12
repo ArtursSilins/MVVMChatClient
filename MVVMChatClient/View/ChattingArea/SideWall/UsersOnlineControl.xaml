@@ -74,14 +74,14 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid >
+    <Grid MouseLeftButtonDown="Grid_MouseLeftButtonDown">
 
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="MouseLeftButtonDown">
                 <i:InvokeCommandAction Command="{Binding DataContext._PrivateChatCommand,
-                    Delay=1000,
-                    RelativeSource={RelativeSource AncestorType={x:Type local:UsersOnlineListContainer}}}"
-                                       CommandParameter="{Binding}"/>
+                   RelativeSource={RelativeSource AncestorType={x:Type local:UsersOnlineListContainer}}}"
+                    CommandParameter="{Binding}"/>
+
             </i:EventTrigger>
         </i:Interaction.Triggers>
 
@@ -95,21 +95,32 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <Border CornerRadius="12"
+                Visibility="{Binding NotificationVisibility, TargetNullValue='Hidden'}"
+                    Background="#FFF13333"
+                    Panel.ZIndex="1"
+                    Width="28"
+                    Margin="0 0 85 1">
 
-        <Border x:Name="border2" 
-                 Grid.RowSpan="3"
-                 Grid.ColumnSpan="2"
-                 Margin="0 2 38 2"
-                 Background="#5cb863">
+            <TextBlock Text="{Binding NotificationText}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                   FontWeight="SemiBold"
+                   Foreground="White"
+                   FontSize="11" 
+                   Padding="0 0 0 0"
+                   Height="15"
+                   MaxWidth="36"
+                   Margin="8 0 8 0"/>
+        </Border>
 
-
-            <Border x:Name="border1" 
+        <Border x:Name="border1" 
                 Grid.RowSpan="3"
                 Grid.ColumnSpan="2"
-                Margin="0 6 0 6"              
+                Margin="7 4 38 4"              
                 Background="#FFD8D8D8">
 
-                <TextBlock TextWrapping="Wrap"
+            <TextBlock TextWrapping="Wrap"
                            VerticalAlignment="Center"
                            Text="{Binding UserName}"
                            FontSize="{Binding FontSize}"
@@ -120,9 +131,8 @@
                            Margin="0, 0, 0, 0"
                            Padding="5 5 5 5">
 
-                </TextBlock>
+            </TextBlock>
 
-            </Border>
         </Border>
 
         <Ellipse 

@@ -9,6 +9,6 @@ namespace MVVMChatClient.Core.Model
 {
     public class CurrentPersonId
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
     }
 }

@@ -10,6 +10,6 @@ namespace MVVMChatClient.Core.Model
     public class DisconnectContent : IDisconnectContent
     {
         public string ExitMessage { get; set; } = "€noc§dne§€";
-        public int Id { get; set; } = User.Id;
+        public string Id { get; set; } = User.Id;
     }
 }

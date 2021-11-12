@@ -24,7 +24,9 @@ namespace MVVMChatClient.Core.Model
         }
 
         public string UserPicture { get; set; }
-        public int PersonId { get; set; }
+        public string PersonId { get; set; }
+        public int NotificationText { get; set; }
+        public string NotificationVisibility { get; set; }
         public int FontSize { get => Size(UserName.Length); }      
 
         public int Size(int length)

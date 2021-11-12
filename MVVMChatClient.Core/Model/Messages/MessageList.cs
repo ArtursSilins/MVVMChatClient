@@ -14,16 +14,7 @@ namespace MVVMChatClient.Core.Model
     public class MessageList:ViewModelBase
     {
 
-        private static ObservableCollection<IMessageContent> items;
-
-        public static ObservableCollection<IMessageContent> Items
-        {
-            get { return items; }
-            set
-            {
-                items = value;
-            }
-        }
+        public static ObservableCollection<IMessageContent> Items;
 
     }
 }

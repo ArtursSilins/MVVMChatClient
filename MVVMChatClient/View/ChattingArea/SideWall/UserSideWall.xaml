@@ -15,7 +15,7 @@
         <StackPanel >
 
 
-            <Border Width="105"
+            <Border Width="150"
                 Margin="0,10,0,0"
                 Height="{Binding ActualWidth, RelativeSource={RelativeSource Self} }"
                 CornerRadius="{Binding ActualWidth, RelativeSource={RelativeSource Self}}">
@@ -31,7 +31,8 @@
                    Foreground="AliceBlue"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Margin="0,10,0,0">
+                       Padding="0 10 0 0"
+                   >
 
             </TextBlock>
             

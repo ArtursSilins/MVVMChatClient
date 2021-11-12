@@ -20,6 +20,13 @@ namespace MVVMChatClient.Core.ViewModel.BaseClass
             
         }
 
+        public static event PropertyChangedEventHandler PropertyChangedStatic = (s, e) => { };
+        public void OnPropertyChangedStatic(string name)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(name));
+
+        }
+
     }
   
 }

@@ -26,7 +26,11 @@ namespace MVVMChatClient.Core.Model
         public string MessagePicture { get; set; }
         public byte[] Pic { get; set; }
         public bool PictureChanged { get; set; }
-        public int Id { get; set; }
+        public string Id { get; set; }
+        /// <summary>
+        /// A list of people for whom the message is intended.
+        /// </summary>
+        public List<string> IdList { get; set; }
 
 
         public IMessageContent NewInstance(IMessageContent from)
@@ -43,6 +47,7 @@ namespace MVVMChatClient.Core.Model
             content.Pic = from.Pic;
             content.PictureChanged = from.PictureChanged;
             content.Id = from.Id;
+            content.IdList = new List<string>(from.IdList);
 
             return content;
         }

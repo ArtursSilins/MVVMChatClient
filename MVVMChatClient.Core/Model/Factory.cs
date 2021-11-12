@@ -1,4 +1,5 @@
 ﻿using MVVMChatClient.Core.Interfaces;
+using MVVMChatClient.Core.Model.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,13 +31,17 @@ namespace MVVMChatClient.Core.Model
         {
             return new UserContent();
         }
-        public static IJsonContainer CreateJsonContainer()
+        public static ICredential CreateCredential()
         {
-            return new JsonContainer();
+            return new Credential();
+        }
+        public static IJsonBaseContainer CreateJsonContainer()
+        {
+            return new BaseContainer();
         }
         public static IJsonMessageContainer CreateMessageContainer()
         {
-            return new JsonMessageContainer()
+            return new MessageContainer()
             {
                 Switch = new ChatSwitch(),
                 Message = new MessageContent()

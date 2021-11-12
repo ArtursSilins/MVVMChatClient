@@ -23,8 +23,12 @@ namespace MVVMChatClient
             }
             return arr;
         }
-        
-        public void ByteToImage(byte[] array, int id)
+        /// <summary>
+        /// Convert bytes to image file and set Id as a file name.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="id"></param>
+        public void ByteToImage(byte[] array, string id)
         {
             using (Image image = Image.FromStream(new MemoryStream(array)))
             {

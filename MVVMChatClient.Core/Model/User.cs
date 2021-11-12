@@ -8,6 +8,13 @@ namespace MVVMChatClient.Core.Model
 {
     public static class User
     {
-        public static int Id { get; set; }
+        /// <summary>
+        /// Current user Id.
+        /// </summary>
+        public static string Id { get; set; }
+        /// <summary>
+        /// Private Chat person Id.
+        /// </summary>
+        public static string PrivatePersonId { get; set; }
     }
 }

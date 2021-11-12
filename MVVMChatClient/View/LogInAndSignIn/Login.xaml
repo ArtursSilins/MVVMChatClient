@@ -69,7 +69,8 @@
                          Foreground="#FFE8E8E8"
                          HorizontalContentAlignment="Center"
                          VerticalContentAlignment="Center"                    
-                         Style="{DynamicResource PasswordBoxStyle}">
+                         Style="{DynamicResource PasswordBoxStyle}"
+                         PasswordChanged="Password_PasswordChanged">
 
             </PasswordBox>
 

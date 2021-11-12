@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MVVMChatClient.Core.Model
 {
-    public class JsonMessageContainer:IJsonMessageContainer
+    public class MessageContainer:IJsonMessageContainer
     {
         public ChatSwitch Switch { get; set; }
         public MessageContent Message { get; set; }

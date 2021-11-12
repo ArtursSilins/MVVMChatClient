@@ -143,7 +143,7 @@ namespace MVVMChatClient.Core.ViewModel
             IMessageContent messageContent,
             IPerson person,
             ITcpEndPoint tcpEndPoint,
-            IJsonContainer container,
+            IJsonBaseContainer container,
             IUserContent userContent)
         {
             _person = person;
@@ -152,9 +152,6 @@ namespace MVVMChatClient.Core.ViewModel
             firstTime = true;
             IsNameSet = false;
             ArrowVisibility = "Hidden";
-
-            //SetView = new ParameterRelayCommand(_windowsViewModel, GetUserData, chatting.Receiving,
-              //  this, messageList, messageContent, tcpEndPoint, container, NoNameCheck);
 
             SetPicFamele = new RelayCommand(SetDefoultFamelePic);
             SetPicMale = new RelayCommand(SetDefoultMalePic);

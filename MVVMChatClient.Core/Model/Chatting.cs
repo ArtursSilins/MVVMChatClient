@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.IO;
 using MVVMChatClient.Core.Model.ClientComunication;
+using MVVMChatClient.Core.Model.EncryptAndDecrypt;
+using MVVMChatClient.Core.Model.Authorization;
 
 namespace MVVMChatClient.Core.Model
 {
@@ -42,17 +44,16 @@ namespace MVVMChatClient.Core.Model
             connectDone.Set();
         }
 
-        private static void GetAllMessages(IMessageContent messageContent, IJsonContainer container, SynchronizationContext uiContext)
+        private static void GetAllMessages(IMessageContent messageContent, IJsonBaseContainer container, SynchronizationContext uiContext)
         {
             foreach (var item in container.Messages)
             {
-                //messageTextEncryption
-
                 uiContext.Send(x => MessageList.Items.Add(messageContent.NewInstance(item)), null);
+                PublicChat.ChatListHolder.Content.Add(messageContent.NewInstance(item));
             }
         }
 
-        private void ChangeOnlineUserList(SynchronizationContext uiContext, IJsonContainer container, string textFromServer)
+        private void ChangeOnlineUserList(SynchronizationContext uiContext, IJsonBaseContainer container, string textFromServer)
         {
             UserContent temporaryUserContent = new UserContent();
 
@@ -83,7 +84,7 @@ namespace MVVMChatClient.Core.Model
                 uiContext.Send(x => OnlineUsers.UserList.RemoveAt(GetIndexToRemove(container.Persons)), null);
             }
         }
-        private void AddToOnlineUserList(SynchronizationContext uiContext, IJsonContainer container)
+        private void AddToOnlineUserList(SynchronizationContext uiContext, IJsonBaseContainer container)
         {
             foreach (var item in container.Persons)
             {
@@ -109,7 +110,7 @@ namespace MVVMChatClient.Core.Model
         }
         private void AddNewMessage(SynchronizationContext uiContext, IJsonMessageContainer jsonMessageContainer, string textFromServer)
         {
-            jsonMessageContainer = ConverData.ToReceiv<JsonMessageContainer>(textFromServer);
+            jsonMessageContainer = ConverData.ToReceiv<MessageContainer>(textFromServer);
 
 
             if (jsonMessageContainer.Switch.ChatMode == ChatMode.Public)
@@ -124,20 +125,22 @@ namespace MVVMChatClient.Core.Model
             }
             else if(jsonMessageContainer.Switch.ChatMode == ChatMode.Private)
             {
-                uiContext.Send(x => PrivateChat.ChatListHolder.AddToPersonChat(jsonMessageContainer.Message.Id,
+                uiContext.Send(x => PrivateChat.ChatListHolder.AddToPersonChat(jsonMessageContainer.Message.IdList,
                     jsonMessageContainer.Message), null);
 
-                if(CurrentChatMode.Mode == ChatMode.Private)
+                uiContext.Send(x => OnlineUsersList.Notifications.Add(), null);
+
+                if (CurrentChatMode.Mode == ChatMode.Private)
                 {
+                    OnlineUsersList.Notifications.Remove();
+
                     uiContext.Send(x => MessageList.Items.Add(jsonMessageContainer.Message), null);
                 }
             }
 
-            //uiContext.Send(x => MessageList.Items.Add(jsonMessageContainer.Message), null);
-
         }
 
-        private StringBuilder ReceivData(SynchronizationContext uiContext, IJsonContainer container)
+        private StringBuilder ReceivData(SynchronizationContext uiContext, IJsonBaseContainer container)
         {
 
             var buffer = new byte[256];
@@ -248,7 +251,10 @@ namespace MVVMChatClient.Core.Model
 
 
         public void Receiving(IWindowsViewModel windowsViewModel,
-            IMessageContent messageContent, IJsonContainer container, IJsonMessageContainer jsonMessageContainer)
+            IMessageContent messageContent,
+            IJsonBaseContainer container,
+            IJsonMessageContainer jsonMessageContainer
+            , ICredential credential)
         {
 
             _windowsViewModel = windowsViewModel;
@@ -262,18 +268,16 @@ namespace MVVMChatClient.Core.Model
             Task.Run(() =>
             {
 
-                if (GetPermission(uiContext, container))///true then next
+
+                if (GetPermission(uiContext, container, credential))///true then next
                 {
                     _windowsViewModel.ChangeView(2);
 
-                    //while (IsConnected)
-                    //{
-                        Chat(uiContext, container, messageContent, jsonMessageContainer);
-                    //}
+                    Chat(uiContext, container, messageContent, jsonMessageContainer);
+
                 }
                 else
                 {
-                    //FirstTimeLogin = false;//to isConnected class ?
 
                     _windowsViewModel.ChangeView(1);
 
@@ -284,24 +288,44 @@ namespace MVVMChatClient.Core.Model
 
         }
 
-        private bool GetPermission(SynchronizationContext uiContext, IJsonContainer container)
+        private bool GetPermission(SynchronizationContext uiContext, IJsonBaseContainer container, ICredential credential)
         {
             bool userExists = false;
 
-           // if (LogInViewModel.FirstTimeLogin)
                 ConnectingToServer();
 
-            TcpSocket.tcpSocket.BeginSend(ConverData.ToSend(PersonList.GetPersonInfo()), 0, ConverData.ToSend(PersonList.GetPersonInfo()).Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
+            // send public key
+            AsymmetricEncryption.CreateKey("Client");
+
+            credential.NeedAction = true;
+            credential.NeedKeys = true;
+            credential.PubKey = AsymmetricEncryption.PubKeyString("Client");
+            
+            TcpSocket.tcpSocket.BeginSend(ConverData.SendPubKey(credential), 0,
+                ConverData.SendPubKey(credential).Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
+
+
+            //TcpSocket.tcpSocket.BeginSend(ConverData.ToSend(PersonList.GetPersonInfo()), 0, ConverData.ToSend(PersonList.GetPersonInfo()).Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
             connectDone.WaitOne();
 
             TextFromServer = ReceivData(uiContext, container);
 
             try
             {
-                container = ConverData.ToReceiv<JsonContainer>(TextFromServer.ToString());
+                credential = ConverData.ReceivKeys<Credential>(TextFromServer.ToString());
+
+                credential.IV = AsymmetricEncryption.DecryptWithPrivateKey(credential.IV);
+                credential.SymmetricKey = AsymmetricEncryption.DecryptWithPrivateKey(credential.SymmetricKey);
+
+                KeyContainer.SymmetricKey.UserKeys = new System.Security.Cryptography.RijndaelManaged();
+                KeyContainer.SymmetricKey.UserKeys.Key = Convert.FromBase64String(credential.SymmetricKey);
+                KeyContainer.SymmetricKey.UserKeys.IV = Convert.FromBase64String(credential.IV);
+
+                credential.IV = null;
+                credential.SymmetricKey = null;
 
                 //if apruval ok userExists = true
-                userExists = true; //just for test!!!!!!!!!!!!
+                userExists = false; //just for test!!!!!!!!!!!!
             }
             catch (Exception ex)
             {
@@ -312,7 +336,7 @@ namespace MVVMChatClient.Core.Model
 
             return userExists;
         }
-        private void Chat(SynchronizationContext uiContext, IJsonContainer container,
+        private void Chat(SynchronizationContext uiContext, IJsonBaseContainer container,
             IMessageContent messageContent, IJsonMessageContainer jsonMessageContainer)
         {
             while (IsConnected)
@@ -322,7 +346,7 @@ namespace MVVMChatClient.Core.Model
 
                 try
                 {
-                    container = ConverData.ToReceiv<JsonContainer>(TextFromServer.ToString());
+                    container = ConverData.ToReceiv<BaseContainer>(TextFromServer.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -332,7 +356,7 @@ namespace MVVMChatClient.Core.Model
                 if (FirstTime)
                 {
                     if (container.CurrentPersonId != null)
-                        User.Id = container.CurrentPersonId.Id;
+                        User.Id = container.CurrentPersonId;
 
                     AddToOnlineUserList(uiContext, container);
 

@@ -12,7 +12,8 @@ namespace MVVMChatClient.Core.Interfaces
     {
         void Receiving(IWindowsViewModel windowsViewModel,
             IMessageContent messageContent,
-            IJsonContainer container,
-            IJsonMessageContainer jsonMessageContainer);
+            IJsonBaseContainer container,
+            IJsonMessageContainer jsonMessageContainer,
+            ICredential credential);
     }
 }

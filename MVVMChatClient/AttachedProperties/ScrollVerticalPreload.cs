@@ -15,9 +15,8 @@ namespace MVVMChatClient
             DependencyProperty.RegisterAttached("MonitorScroll", typeof(bool), typeof(ScrollVerticalPreload),
                 new FrameworkPropertyMetadata(false, OnScrollChanged));
 
-        private static bool AllowedAddItems { get; set; }
-        private static int OneScrollMaxWidth { get; set; } = 200;
         private static bool FirstAddDone { get; set; }
+
         private static void OnScrollChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (!(d is ScrollViewer scroll))
@@ -37,7 +36,6 @@ namespace MVVMChatClient
                      && !Core.Model.ChatSwitching.ChatSwitchBase.AllItemsAdded &&
                      Core.Model.ChatSwitching.ChatSwitchBase.FinishAdd)
                 {
-                    //scroll.ScrollToVerticalOffset(scroll.ScrollableHeight * 0.6);
                     Core.Model.PublicChat.ChatListHolder.AddAdditionalMessages();
                     Core.Model.ChatSwitching.ChatSwitchBase.FinishAdd = false;
                 }
@@ -46,7 +44,15 @@ namespace MVVMChatClient
             }
             else if (MVVMChatClient.Core.Model.CurrentChatMode.Mode == Core.Model.ChatMode.Private)
             {
+                if (scroll.ScrollableHeight - scroll.VerticalOffset > scroll.ScrollableHeight * 0.7 && FirstAddDone
+                    && !Core.Model.ChatSwitching.ChatSwitchBase.AllItemsAdded &&
+                    Core.Model.ChatSwitching.ChatSwitchBase.FinishAdd)
+                {
+                    Core.Model.PrivateChat.ChatListHolder.AddAdditionalMessages();
+                    Core.Model.ChatSwitching.ChatSwitchBase.FinishAdd = false;
+                }
 
+                FirstAddDone = true;
             }
 
 

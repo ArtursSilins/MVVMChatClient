@@ -27,7 +27,14 @@ namespace MVVMChatClient.Core.ViewModel
 
         private DispatcherTimer Timer;
 
+        private DispatcherTimer MessageDelayTimer;
+
         private string sendText;
+
+        /// <summary>
+        /// Disable two time click while loading private chat.
+        /// </summary>
+        public static bool AllowPrivateChat { get; set; }
 
         public string SendText
         {
@@ -66,7 +73,7 @@ namespace MVVMChatClient.Core.ViewModel
         {
             get
             {
-                return nameText = UserInfo.Name;
+                return nameText;
             }
             set
             {
@@ -93,6 +100,8 @@ namespace MVVMChatClient.Core.ViewModel
 
             MessageList.Items.Clear();
 
+            Model.ChatSwitching.ChatSwitchBase.RessetData();
+
             Model.PublicChat.ChatListHolder.AddMessagesFirstTime();
 
             _windowsViewModel.ChangeView(2);
@@ -100,11 +109,16 @@ namespace MVVMChatClient.Core.ViewModel
 
         public void SetPrivateChat()
         {
-            Timer = new DispatcherTimer();
-            Timer = new DispatcherTimer(DispatcherPriority.SystemIdle);
-            Timer.Interval = TimeSpan.FromMilliseconds(300);
-            Timer.Tick += Timer_Tick;
-            Timer.Start();
+            if(AllowPrivateChat)
+            {
+                AllowPrivateChat = false;
+
+                Timer = new DispatcherTimer();
+                Timer = new DispatcherTimer(DispatcherPriority.SystemIdle);
+                Timer.Interval = TimeSpan.FromMilliseconds(0);
+                Timer.Tick += Timer_Tick;
+                Timer.Start();
+            }
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -112,22 +126,46 @@ namespace MVVMChatClient.Core.ViewModel
             if (PrivateCahtPersonData.RepeatGet != null)
             {
                 CurrentChatMode.Mode = ChatMode.Private;
+
+                Model.OnlineUsersList.Notifications.Id = PrivateCahtPersonData.RepeatGet.PersonId;
+
+                Model.OnlineUsersList.Notifications.Remove();
+
+                Model.ChatSwitching.ChatSwitchBase.RessetData();
+
+                User.PrivatePersonId = PrivateCahtPersonData.RepeatGet.PersonId;
+
+                NameText = PrivateCahtPersonData.RepeatGet.UserName;
+
+                _windowsViewModel.ChangeView(3);
+
                 MessageList.Items.Clear();
 
-                Model.PublicChat.ChatListHolder.RessetMessageCount();
-
-                Model.PrivateChat.ChatListHolder.GetPersonChat(PrivateCahtPersonData.RepeatGet.PersonId);
-                //MessageList.Items = ChatListHolder.GetPersonChat(PrivateCahtPersonData.RepeatGet);
-                _windowsViewModel.ChangeView(3);
-                Timer.Stop();
+                MessageDelayTimer = new DispatcherTimer();
+                MessageDelayTimer = new DispatcherTimer(DispatcherPriority.SystemIdle);
+                MessageDelayTimer.Interval = TimeSpan.FromMilliseconds(400);
+                MessageDelayTimer.Tick += MessageDelayTimer_Tick;
+                MessageDelayTimer.Start();
 
                 PrivateCahtPersonData.Get = null;
+
+                AllowPrivateChat = true;
+
+                Timer.Stop();
             }
+        }
+
+        private void MessageDelayTimer_Tick(object sender, EventArgs e)
+        {
+            Model.PrivateChat.ChatListHolder.GetPersonChatFirstTime(PrivateCahtPersonData.RepeatGet.PersonId);
+            MessageDelayTimer.Stop();
         }
 
         public void Send()
         {
             _jsonMessageContainer.Switch.ChatMode = ChatMode.Private;
+
+            _jsonMessageContainer.Message.IdList = new List<string>() { User.Id, User.PrivatePersonId };
 
             _jsonMessageContainer.Message.MessageText = SendText;
             _jsonMessageContainer.Message.MessageTime = DateTime.Now.ToShortTimeString();

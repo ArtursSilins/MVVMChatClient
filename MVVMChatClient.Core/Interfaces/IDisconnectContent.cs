@@ -9,6 +9,6 @@ namespace MVVMChatClient.Core.Interfaces
     public interface IDisconnectContent
     {
         string ExitMessage { get; set; }
-        int Id { get; set; } 
+        string Id { get; set; } 
     }
 }

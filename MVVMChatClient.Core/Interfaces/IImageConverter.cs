@@ -9,6 +9,6 @@ namespace MVVMChatClient.Core.Interfaces
     public interface IImageConverter
     {
         byte[] ImageToByte(string path);
-        void ByteToImage(byte[] array, int id);
+        void ByteToImage(byte[] array, string id);
     }
 }

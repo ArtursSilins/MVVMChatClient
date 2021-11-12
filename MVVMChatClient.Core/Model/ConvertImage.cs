@@ -15,7 +15,12 @@ namespace MVVMChatClient.Core.Model
         {
             return imageConverter.ImageToByte(path);
         }
-        public static void ByteToImage(byte[] array, int id)
+        /// <summary>
+        /// Convert bytes to image file and set Id as a file name.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="id"></param>
+        public static void ByteToImage(byte[] array, string id)
         {
             imageConverter.ByteToImage(array, id);
         }

@@ -26,7 +26,9 @@ namespace MVVMChatClient.Core.Interfaces
         byte[] Pic { get; set; }
 
         bool PictureChanged { get; set; }
-        int Id { get; set; }
+        string Id { get; set; }
+        List<string> IdList { get; set; }
+
 
         IMessageContent NewInstance(IMessageContent from);
     }

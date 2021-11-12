@@ -12,7 +12,6 @@ namespace MVVMChatClient.Core.Model.EncryptAndDecrypt
         private static RSAParameters _privateKey;
         private static RSAParameters _publicKey;
         private static string _publicKeyString;
-        private static UnicodeEncoding _encoder = new UnicodeEncoding();
 
         public static void RSACreate()
         {
@@ -34,6 +33,16 @@ namespace MVVMChatClient.Core.Model.EncryptAndDecrypt
            
             return Convert.ToBase64String(encryptedByteArray);
         }
+        public static string TestEncrypt(string data, RSAParameters pubKey)
+        {
+            var rsa = new RSACryptoServiceProvider();
+            rsa.ImportParameters(pubKey);
+
+            byte[] dataToEncrypt = Encoding.UTF8.GetBytes(data);
+            var encryptedByteArray = rsa.Encrypt(dataToEncrypt, false);
+
+            return Convert.ToBase64String(encryptedByteArray);
+        }
 
         public static string Decrypt(string data)
         {
@@ -45,6 +54,15 @@ namespace MVVMChatClient.Core.Model.EncryptAndDecrypt
 
             return Encoding.UTF8.GetString(original1);
         }
+        public static string TestDecrypt(string data )
+        {
+            var rsa = new RSACryptoServiceProvider();
+            rsa.ImportParameters(StoreAsymmetricKeys.GetPrivateKeyFromContainer("Test"));
 
+            byte[] original = Convert.FromBase64String(data);
+            byte[] original1 = rsa.Decrypt(original, false);
+
+            return Encoding.UTF8.GetString(original1);
+        }
     }
 }

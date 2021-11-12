@@ -139,3 +139,5 @@ C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClie
 C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\obj\Debug\View\ChattingArea\PublicChat.baml
 C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\obj\Debug\View\ChattingArea\PrivateChat.g.cs
 C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\obj\Debug\View\ChattingArea\PrivateChat.baml
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\bin\Debug\PBKDF2.NET.dll
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\bin\Debug\PBKDF2.NET.xml

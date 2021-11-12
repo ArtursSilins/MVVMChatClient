@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Input;
 using Newtonsoft.Json;
 using System.Net.Sockets;
+using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace MVVMChatClient.Core.ViewModel
 {
@@ -99,10 +101,25 @@ namespace MVVMChatClient.Core.ViewModel
             }
         }
 
+        private bool startUnloadAnimation;
+
+        public bool StartUnloadAnimation
+        {
+            get { return startUnloadAnimation; }
+            set
+            {
+                startUnloadAnimation = value;
+                OnPropertyChanged(nameof(StartUnloadAnimation));
+            }
+        }
+
+
 
         public void Send()
         {
             _jsonMessageContainer.Switch.ChatMode = ChatMode.Public;
+
+            _jsonMessageContainer.Message.IdList = new List<string>() { User.Id};
 
             _jsonMessageContainer.Message.MessageText = SendText;
             _jsonMessageContainer.Message.MessageTime = DateTime.Now.ToShortTimeString();
@@ -175,22 +192,22 @@ namespace MVVMChatClient.Core.ViewModel
             IPrivateChatViewModel privateChatViewModel)
         {
             _windowsViewModel = windowsViewModel;
-
             _jsonMessageContainer = messageContainer;
-
             _privateChatViewModel = privateChatViewModel;
-
+            
             _SendCommand = new RelayCommand(Send);
 
+            StartUnloadAnimation = true;
+
+            PrivateChatViewModel.AllowPrivateChat = true;
             _PrivateChatCommand = new RelayCommand(_privateChatViewModel.SetPrivateChat);
 
-            OnlineUsers.UserList = new ObservableCollection<IUserContent>();
-
+            OnlineUsers.UserList = new BindingList<IUserContent>();
+            
         }
 
         public void Disconnect()
         {
-
             _disconnectContent = Factory.CreateDisconnectContent();
 
             _disconnectContent.Id = User.Id;
