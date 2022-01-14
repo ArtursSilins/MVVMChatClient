@@ -1,4 +1,5 @@
 ﻿using MVVMChatClient.Core.Interfaces;
+using MVVMChatClient.Core.Model.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,28 +11,28 @@ namespace MVVMChatClient.Core.ViewModel.Commands
 {
     public class LogInRelayCommand : ICommand
     {
+
         public event EventHandler CanExecuteChanged;
-        private Action _execute2;
-        private Action<IWindowsViewModel, IMessageContent, IJsonBaseContainer, IJsonMessageContainer> _execute3;
-        private ILogInViewModel _userData;
+        private Action _sendData;
+        private Action<IWindowsViewModel, IMessageContent, IJsonBaseContainer, IJsonMessageContainer> _startConnetion;
         private IMessageContent _messageContent;
-        private ITcpEndPoint _tcpEndPoint;
         private IJsonBaseContainer _container;
         private IJsonMessageContainer _jsonMessageContainer;
         private IWindowsViewModel _windowsViewModel;
+        private bool _signInPasswordMatch;
 
-
-        public LogInRelayCommand(IWindowsViewModel windowsViewModel, Action execute2, Action<IWindowsViewModel, IMessageContent, IJsonBaseContainer, IJsonMessageContainer> execute3,
-            ILogInViewModel userData, IMessageContent messageContent, ITcpEndPoint tcpEndPoint, IJsonBaseContainer container, IJsonMessageContainer jsonMessageContainer)
+        public LogInRelayCommand(IWindowsViewModel windowsViewModel, Action sendData,
+            Action<IWindowsViewModel, IMessageContent, IJsonBaseContainer, IJsonMessageContainer> startConnection,
+           IMessageContent messageContent, IJsonBaseContainer container, IJsonMessageContainer jsonMessageContainer,
+           bool signInPasswordMatch = true )
         {
-            _execute2 = execute2;
-            _execute3 = execute3;
-            _userData = userData;
+            _sendData = sendData;
+            _startConnetion = startConnection;
             _messageContent = messageContent;
-            _tcpEndPoint = tcpEndPoint;
             _container = container;
             _jsonMessageContainer = jsonMessageContainer;
             _windowsViewModel = windowsViewModel;
+            _signInPasswordMatch = signInPasswordMatch;
         }
 
         public bool CanExecute(object parameter)
@@ -41,8 +42,14 @@ namespace MVVMChatClient.Core.ViewModel.Commands
 
         public void Execute(object parameter)
         {
-            _execute2.Invoke();
-            _execute3.Invoke(_windowsViewModel, _messageContent, _container, _jsonMessageContainer);
+            LogInViewModel.RaiseStartLoadingEvent();
+
+            CurrentViewModel.SetViewModel(LogInOrSignIn.LogIn);
+
+            if (!LogInViewModel.FirstTimeLogin)
+                _startConnetion.Invoke(_windowsViewModel, _messageContent, _container, _jsonMessageContainer);
+            else
+                _sendData.Invoke();
         }
     }
 }

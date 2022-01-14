@@ -103,7 +103,12 @@ namespace MVVMChatClient.Core.Model.EncryptAndDecrypt
         public static string Decrypt(string text, byte[] Key, byte[] IV)
         {
 
-            byte[] data = Encoding.UTF8.GetBytes(text);
+            //byte[] data = Encoding.UTF8.GetBytes(text);
+
+            try
+            {
+            byte[] data = Convert.FromBase64String(text);
+
             // Check arguments.
             if (text == null || text.Length <= 0)
                 throw new ArgumentNullException("cipherText");
@@ -142,7 +147,14 @@ namespace MVVMChatClient.Core.Model.EncryptAndDecrypt
                 }
             }
 
+
             return plaintext;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }

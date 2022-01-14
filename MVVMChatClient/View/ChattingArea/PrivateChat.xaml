@@ -50,7 +50,7 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    
+
     <UserControl.Triggers>
         <EventTrigger RoutedEvent="UserControl.Loaded">
             <BeginStoryboard>
@@ -94,7 +94,7 @@
                         <EasingDoubleKeyFrame KeyTime="0" Value="1000"/>
                         <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
                     </DoubleAnimationUsingKeyFrames>
-                    
+
                     <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="messageList">
                         <EasingDoubleKeyFrame KeyTime="0" Value="-1000"/>
                         <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
@@ -108,7 +108,10 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Grid >
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="pack://application:,,,/MVVMChatClient;component/View/Images/50194b7860774d22f17c0bb2518f3bcd.png"/>
+        </Grid.Background>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="10"/>
@@ -173,7 +176,7 @@
             </local:UserSideWall.RenderTransform>
 
         </local:UserSideWall>
-       
+
         <StackPanel x:Name="stackPanel" VerticalAlignment="Bottom"
                     Margin="0 0 0 10"
                     Grid.Column="1"
@@ -189,7 +192,7 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </StackPanel.RenderTransform>
-            
+
             <TextBox x:Name="message"           
                  FontSize="20" 
                  TextWrapping="Wrap"
@@ -284,9 +287,9 @@
                            Text="&#xE761;"
                            VerticalAlignment="Center"/>
             </StackPanel>
-            
+
         </Button>
-        
+
         <Button x:Name="send"
                 IsDefault="True"
                 IsEnabled="{Binding ElementName=message, Path=Text.Length}"
@@ -309,7 +312,7 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </Button.RenderTransform>
-            
+
         </Button>
 
     </Grid>

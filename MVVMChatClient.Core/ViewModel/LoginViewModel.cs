@@ -1,6 +1,5 @@
 ﻿using MVVMChatClient.Core.Interfaces;
 using MVVMChatClient.Core.Model;
-using MVVMChatClient.Core.Model.ClientComunication;
 using MVVMChatClient.Core.Model.EncryptAndDecrypt;
 using MVVMChatClient.Core.ViewModel.BaseClass;
 using MVVMChatClient.Core.ViewModel.Commands;
@@ -15,18 +14,22 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace MVVMChatClient.Core.ViewModel
 {
     public class LogInViewModel : ViewModelBase, ILogInViewModel
     {
+        public static event EventHandler _startLoading;
+        public static event EventHandler<bool> _endLoading;
+
+        public static event EventHandler _sendDataEvent;
+
         private IWindowsViewModel _windowsViewModel;
         private IPerson _person;
         private IUserValidationData _userValidationData;
 
         private IJsonMessageContainer _jsonMessageContainer;
-
-        private ICredential _credential;
 
         private IJsonBaseContainer _container;
 
@@ -36,6 +39,7 @@ namespace MVVMChatClient.Core.ViewModel
         public ICommand AddPic { get; private set; }
         public ICommand GetData { get; set; }
         public ICommand SwitchToSignIn { get; set; }
+        public ICommand ForgotPassword { get; set; }
         public static bool FirstTimeLogin { get; set; }
         public static bool PasswordReady { get; set; }
         private string userName;
@@ -52,70 +56,130 @@ namespace MVVMChatClient.Core.ViewModel
                 OnPropertyChanged(nameof(UserName));
             }
         }
+
+        private string logInErrorMessage;
+
+        public string LogInErrorMessage
+        {
+            get { return logInErrorMessage; }
+            set
+            {
+                logInErrorMessage = value;
+                OnPropertyChanged(nameof(LogInErrorMessage));
+            }
+        }
+
+
+        /// <summary>
+        /// Visibility of Button
+        /// </summary>
+        private bool logInButton;
+
+        public bool LogInButton
+        {
+            get { return logInButton; }
+            set
+            {
+                logInButton = value;
+                OnPropertyChanged(nameof(LogInButton));
+            }
+        }
+
         public LogInViewModel(IWindowsViewModel windowsViewModel,
             IChatting chatting,
             IMessageContent messageContent,
             IPerson person,
-            ITcpEndPoint tcpEndPoint,
             IJsonBaseContainer container,
             IJsonMessageContainer jsonMessageContainer,
             IUserContent userContent,
-            IUserValidationData userValidationData,
-            ICredential credential)
+            IUserValidationData userValidationData)
         {
             _container = container;
             _person = person;
             _windowsViewModel = windowsViewModel;
             _userValidationData = userValidationData;
             _jsonMessageContainer = jsonMessageContainer;
-            _credential = credential;
-            //test enconding
-            //MessageTextEncryption.RSACreate();
 
-            //šitas strādā
-            //string textEncrypted = MessageTextEncryption.Encrypt("Jipers Krīpers!");
-            //string decrypt = MessageTextEncryption.Decrypt(textEncrypted);
+            LogInButton = true;
+            LogInErrorMessage = "Hidden";
 
-            AsymmetricEncryption.CreateKey("Test");
-            string pubKey = AsymmetricEncryption.PubKeyString("Test");
-
-            RSAParameters publicKey = AsymmetricEncryption.StringToPubKey(pubKey);
-
-            string testEn = MessageTextEncryption.TestEncrypt("abc", /*publicKey*/StoreAsymmetricKeys.GetPublicKeyFromContainer("Test"));
-            string testDe = MessageTextEncryption.TestDecrypt(testEn/*, StoreAsymmetricKeys.GetPrivateKeyFromContainer("Test")*/);
-            // 
-            //  1. COMPARE RECEIVE KEY WITH ACTUAL KEY
-            //  2. EDIT KEY CONTAINER IN ŠITAS STRĀDĀ
-            
-
-            //firstTime = true;
-
-            //////////////////Vecaic variant priekš sarkanās bultas
-            //IsNameSet = false;
-            //ArrowVisibility = "Hidden";
-            ///////////////
-
-            //GetData = new RelayCommand(GetAppruval);//already is excecuted in LogInCommand
             SwitchToSignIn = new RelayCommand(ToSignIn);
 
-            //LogInCommand = new LogInRelayCommand(_windowsViewModel, GetAppruval, chatting.Receiving,
-            //    this, messageContent, tcpEndPoint, container, jsonMessageContainer, credential);
-            LogInCommand = new RelayCommand(SendData);
-            
+            LogInCommand = new LogInRelayCommand(_windowsViewModel, SendData, chatting.Receiving,
+                messageContent, container, jsonMessageContainer);
+
+            ForgotPassword = new RelayCommand(GoToPasswordSender);
+
+            _sendDataEvent += LogInViewModel__sendDataEvent;
+            _startLoading += LogInViewModel__startLoading;
+            _endLoading += LogInViewModel__endLoading1;
 
             //SetPicFamele = new RelayCommand(SetDefoultFamelePic);
             //SetPicMale = new RelayCommand(SetDefoultMalePic);
             //AddPic = new RelayCommand(AddPicture);
         }
 
+        private void GoToPasswordSender()
+        {
+            _windowsViewModel.ChangeView(5);
+        }
+
+        private void LogInViewModel__endLoading1(object sender, bool e)
+        {
+            LogInButton = true;
+
+            if (!e)
+                LogInErrorMessage = "Visible";
+            else
+                LogInErrorMessage = "Hidden";
+           
+        }
+
+        //private void LogInViewModel__endLoading(object sender, EventArgs e)
+        //{
+        //    LogInButton = true;
+        //}
+
+        private void LogInViewModel__startLoading(object sender, EventArgs e)
+        {
+            LogInButton = false;
+        }
+        /// <summary>
+        /// Detect when LogIn button is pressed.
+        /// </summary>
+        public static void RaiseStartLoadingEvent()
+        {
+            _startLoading?.Invoke(typeof(LogInViewModel), EventArgs.Empty);
+        }
+        /// <summary>
+        /// Detect when data from server is received.
+        /// </summary>
+        public static void RaiseEndLoadingEvent(bool exists)
+        {
+            _endLoading?.Invoke(typeof(LogInViewModel), exists);
+        }
+        /// <summary>
+        /// Send data to server after Keys are received.
+        /// </summary>
+        public static void RaiseSendDataEvent()
+        {
+            _sendDataEvent?.Invoke(typeof(LogInViewModel), EventArgs.Empty);
+        }
+        private void LogInViewModel__sendDataEvent(object sender, EventArgs e)
+        {
+            SendData();
+        }
+
         private void SendData()
         {
-            if (PasswordReady)
+            if (!PasswordReady)////////////////////TEST !!!!
             {
+
+
                 _container.Credential = new Model.Authorization.Credential();
 
-                _container.Credential.UserName = UserName;
-                _container.Credential.Password = new NetworkCredential("", Model.Security.UserPassword.Password).Password;
+                _container.Credential.UserName = "Artūrs";//UserName;
+                _container.Credential.Password = "12345";//new NetworkCredential("", Model.Security.UserPassword.Password).Password;
                 _container.Credential.NeedAction = true;
                 _container.Credential.NeedKeys = false;
                 _container.Credential.Login = true;
@@ -144,6 +208,7 @@ namespace MVVMChatClient.Core.ViewModel
                 _container.Credential = null;
             }
         }
+
         private void SendCallback(IAsyncResult ar)
         {
             try
@@ -163,48 +228,6 @@ namespace MVVMChatClient.Core.ViewModel
             _windowsViewModel.ChangeView(0);
         }
 
-        private void GetAppruval()
-        {
-
-            _person.Female = false;
-            _person.Male = true;
-            _person.Name = UserName;
-
-            UserInfo.Name = UserName;
-
-            UserGender.YourGender = Gender.Male;
-            UserInfo.DefaultPicture = Gender.Male;
-
-            SwitchToSignIn = new RelayCommand(ToSignIn);
-
-            PersonList.PersonInfo.Add(_person);
-
-            //_userValidationData.UserName = UserName;
-            ////_userValidationData.Pasword = Password;
-
-
-            //if (!Client.IsConnected)
-            //    Client.Connect(null);
-
-            //if (Client.IsConnected)
-            //{
-            //    var messageInBytes = ConverData.ToSend(_userValidationData);
-
-            //    Client.SendAsync(messageInBytes);
-
-            //    Client.ReceiveAsync(TcpSocket.tcpSocket);
-            //    Client.ReceiveDone.WaitOne();
-
-            //    var apruvalMessage = ConverData.ToReceiv<UserValidationData>(Client.TextFromServer);
-
-            //    //if( )
-            //}
-
-        }
-        private void GetUserData()
-        {
-
-        }
         public void Disconnect()
         {
             //    TcpSocket.tcpSocket.Disconnect(true); 

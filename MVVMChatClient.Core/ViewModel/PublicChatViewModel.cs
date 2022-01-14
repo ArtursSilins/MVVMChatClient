@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using System.ComponentModel;
+using MVVMChatClient.Core.Model.ChatSwitching;
 
 namespace MVVMChatClient.Core.ViewModel
 {
@@ -17,6 +18,8 @@ namespace MVVMChatClient.Core.ViewModel
     {
         public ICommand _SendCommand { get; private set; }
         public ICommand _PrivateChatCommand { get; private set; }
+        public ICommand _SignOut { get; private set; }
+        public ICommand _Settings { get; private set; }
 
         private IWindowsViewModel _windowsViewModel;
 
@@ -122,7 +125,7 @@ namespace MVVMChatClient.Core.ViewModel
             _jsonMessageContainer.Message.IdList = new List<string>() { User.Id};
 
             _jsonMessageContainer.Message.MessageText = SendText;
-            _jsonMessageContainer.Message.MessageTime = DateTime.Now.ToShortTimeString();
+            _jsonMessageContainer.Message.MessageTime = DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss.fff");
             _jsonMessageContainer.Message.MessageColour = SenderReceiwer.Send;
 
             if(!_jsonMessageContainer.Message.PictureChanged)
@@ -181,11 +184,6 @@ namespace MVVMChatClient.Core.ViewModel
             }
         }
 
-        private void DisconnectCallback(IAsyncResult ar)
-        {
-            Socket client = (Socket)ar.AsyncState;
-            client.EndDisconnect(ar);
-        }
 
         public PublicChatViewModel(IJsonMessageContainer messageContainer,
             IWindowsViewModel windowsViewModel,
@@ -202,8 +200,26 @@ namespace MVVMChatClient.Core.ViewModel
             PrivateChatViewModel.AllowPrivateChat = true;
             _PrivateChatCommand = new RelayCommand(_privateChatViewModel.SetPrivateChat);
 
+            _SignOut = new RelayCommand(SignOut);
+
+            _Settings = new RelayCommand(Settings);
+
             OnlineUsers.UserList = new BindingList<IUserContent>();
             
+        }
+
+        private void Settings()
+        {
+            _windowsViewModel.ChangeView(4);
+        }
+
+        private void SignOut()
+        {
+            MessageAddControl.ResetData();
+
+            Chatting.RemoveAllContent();
+
+            Connection.EndConnection(_windowsViewModel, Connection.ChangeViewTo.LogIn);
         }
 
         public void Disconnect()
@@ -216,8 +232,22 @@ namespace MVVMChatClient.Core.ViewModel
 
             TcpSocket.tcpSocket.Shutdown(SocketShutdown.Both);
             TcpSocket.tcpSocket.BeginDisconnect(true, new AsyncCallback(DisconnectCallback), TcpSocket.tcpSocket);
-
         }
-       
+        private void DisconnectCallback(IAsyncResult ar)
+        {
+            try
+            {
+                Socket client = (Socket)ar.AsyncState;
+                client.EndDisconnect(ar);
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
     }
 }

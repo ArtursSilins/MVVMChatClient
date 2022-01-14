@@ -25,5 +25,34 @@ namespace MVVMChatClient
             InitializeComponent();
             scroll.ScrollToBottom();
         }
+        private void Scroll_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ScrollVerticalPreload.MouseDown = false;
+            ScrollVerticalPreload.MouseWeel = false;
+        }
+
+        private void Scroll_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ScrollVerticalPreload.MouseDown = true;
+            ScrollVerticalPreload.MouseDownCounter = 1;
+            ScrollVerticalPreload.MouseWeel = false;
+        }
+        private void Scroll_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            ScrollVerticalPreload.KeyDown = true;
+            ScrollVerticalPreload.MouseDownCounter = 1;
+            ScrollVerticalPreload.MouseWeel = false;
+        }
+
+        private void Scroll_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            ScrollVerticalPreload.KeyDown = false;
+            ScrollVerticalPreload.MouseWeel = false;
+        }
+
+        private void Scroll_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollVerticalPreload.MouseWeel = true;
+        }
     }
 }

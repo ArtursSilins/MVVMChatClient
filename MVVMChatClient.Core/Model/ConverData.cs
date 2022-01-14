@@ -14,13 +14,15 @@ namespace MVVMChatClient.Core.Model
         public static byte[] ToSend(object data)
         {
             string DataToSend = JsonConvert.SerializeObject(data);
-            byte[] DataInBytes = Encoding.UTF8.GetBytes(SymmetricEncryption.EncryptDataToBytes(DataToSend)/*DataEncryption.Encrypt(DataToSend)*/);
+            byte[] DataInBytes = Encoding.UTF8.GetBytes(SymmetricEncryption.EncryptDataToBytes(DataToSend));
 
             return DataInBytes;
         }       
         public static T ToReceiv<T>(string textFromServer)
         {
-            T objectFromText = JsonConvert.DeserializeObject<T>(DataEncryption.Decrypt(textFromServer));
+            T objectFromText = 
+                JsonConvert.DeserializeObject<T>(SymmetricEncryption.Decrypt(textFromServer,
+                KeyContainer.SymmetricKey.UserKeys.Key, KeyContainer.SymmetricKey.UserKeys.IV ));
 
             return objectFromText;
         }
@@ -43,11 +45,5 @@ namespace MVVMChatClient.Core.Model
 
             return objectFromText;
         }
-        //public static T ReceivKeys<T>(string textFromServer)
-        //{
-        //    T objectFromText = JsonConvert.DeserializeObject<T>(AsymmetricEncryption.DecryptWithPrivateKey(textFromServer));
-
-        //    return objectFromText;
-        //}
     }
 }

@@ -10,8 +10,7 @@ namespace MVVMChatClient.Core.Interfaces
     public interface IPerson
     {
         string Name { get; set; }
-        bool Male { get; set; }
-        bool Female { get; set; }
+        int Sex { get; set; }
         Socket Connection { get; set; }
         string PersonId { get; set; }
         string PicturePath { get; set; }

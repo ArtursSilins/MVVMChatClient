@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\App.xaml
-131128650161
-
-30-80303381
-22-1819029808
-View\ChattingArea\PrivateChat.xaml;View\ChattingArea\PublicChat.xaml;View\LogInAndSignIn\Login.xaml;View\LogInAndSignIn\SignIn.xaml;DataStore\DataStore\DataStore.xaml;View\MainWindow.xaml;View\ChattingArea\Messages\MessageItemControl.xaml;View\ChattingArea\Messages\MessageListContainer.xaml;View\ChattingArea\Messages\MessagePicture.xaml;View\Resource\Resources.xaml;View\ChattingArea\SideWall\UserSideWall.xaml;View\ChattingArea\SideWall\UsersOnlineControl.xaml;View\ChattingArea\SideWall\UsersOnlineListContainer.xaml;
+15565669643
+8-554976
+31-1530520554
+231692077107
+View\LogInAndSignIn\PasswordSender.xaml;View\Settings.xaml;View\ChattingArea\PrivateChat.xaml;View\ChattingArea\PublicChat.xaml;View\LogInAndSignIn\Login.xaml;View\LogInAndSignIn\SignIn.xaml;DataStore\DataStore\DataStore.xaml;View\MainWindow.xaml;View\ChattingArea\Messages\MessageItemControl.xaml;View\ChattingArea\Messages\MessageListContainer.xaml;View\ChattingArea\Messages\MessagePicture.xaml;View\Resource\Resources.xaml;View\ChattingArea\SideWall\UserSideWall.xaml;View\ChattingArea\SideWall\UsersOnlineControl.xaml;View\ChattingArea\SideWall\UsersOnlineListContainer.xaml;
 
 True
 

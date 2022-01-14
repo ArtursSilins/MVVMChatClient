@@ -8,9 +8,7 @@ namespace MVVMChatClient.Core.Interfaces
 {
     public interface ISignInViewModel
     {
-        string NameText { get; set; }       
-        bool Male  { get; set; }                   
-        bool Female { get; set; }                      
+        string UserName { get; set; }       
 
     }
 }

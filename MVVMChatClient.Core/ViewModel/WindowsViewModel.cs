@@ -17,8 +17,6 @@ namespace MVVMChatClient.Core.ViewModel
 
         public WindowsViewModel()
         {
-            ITcpEndPoint TcpEndPoint = Factory.CreateEndPoint();
-
             IMessageContent messageContent = Factory.CreateMessageContent();
 
             IPerson person = Factory.CreatePerson();
@@ -35,19 +33,17 @@ namespace MVVMChatClient.Core.ViewModel
 
             PrivateChatViewModel privateChatViewModel = new PrivateChatViewModel(messageContainer, this);
 
-            ICredential credential = Factory.CreateCredential();
-
             IChatting chatting = Factory.CreateConnectingToServer();
-            chatting.Receiving(this, messageContent, container, messageContainer, credential);
-
 
             ViewModels = new List<object>
             {
-                new SignInViewModel(this, chatting, messageContent, person, TcpEndPoint, container, userContent),
-                new LogInViewModel(this, chatting, messageContent, person, TcpEndPoint,
-                container, messageContainer, userContent, userValidationData, credential),
+                new SignInViewModel(this, chatting, messageContent, person, container, messageContainer),
+                new LogInViewModel(this, chatting, messageContent, person,
+                container, messageContainer, userContent, userValidationData),
                 new PublicChatViewModel(messageContainer, this, privateChatViewModel),
-                privateChatViewModel
+                privateChatViewModel,
+                new SettingsViewModel(this),
+                new PasswordSenderViewModel(this)
             };
 
             currentView = ViewModels[1];
@@ -74,14 +70,24 @@ namespace MVVMChatClient.Core.ViewModel
                         if (!Connection.Status)
                             return;
 
-                        //await Task.Delay(600);
                         CurrentView = ViewModels[view];
                         break;
                     case 3:
                         if (!Connection.Status)
                             return;
 
-                        //await Task.Delay(600);
+                        CurrentView = ViewModels[view];
+                        break;
+                    case 4:
+                        if (!Connection.Status)
+                            return;
+
+                        CurrentView = ViewModels[view];
+                        break;
+                    case 5:
+                        //if (!Connection.Status)
+                        //  return;
+                        await Task.Delay(600);
                         CurrentView = ViewModels[view];
                         break;
                 }

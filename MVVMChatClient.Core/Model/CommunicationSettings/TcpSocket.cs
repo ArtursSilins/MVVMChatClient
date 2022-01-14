@@ -10,6 +10,6 @@ namespace MVVMChatClient.Core.Model
 {
     public static class TcpSocket 
     {
-        public static Socket tcpSocket { get; set; } = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        public static Socket tcpSocket { get; set; }
     }
 }

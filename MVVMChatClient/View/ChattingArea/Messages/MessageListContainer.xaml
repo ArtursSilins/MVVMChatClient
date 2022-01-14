@@ -10,26 +10,28 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <!--local:ScrollHelper.Value ="True"-->
     <Grid >
-        <ScrollViewer x:Name="scroll" VerticalScrollBarVisibility="Auto"
-                      local:ScrollHelper.Value ="True"
-                      local:ScrollVerticalPreload.MonitorScroll="True">
-            <ItemsControl x:Name="itemsControl" 
+       
+        <ScrollViewer x:Name="scroll"
+                      PreviewMouseWheel="Scroll_PreviewMouseWheel"
+                      PreviewKeyUp="Scroll_PreviewKeyUp"
+                      PreviewKeyDown="Scroll_PreviewKeyDown"
+                      PreviewMouseLeftButtonDown="Scroll_PreviewMouseLeftButtonDown"
+                      PreviewMouseLeftButtonUp="Scroll_PreviewMouseLeftButtonUp"
+                      VerticalScrollBarVisibility="Auto"
+                      local:ScrollVerticalPreload.MonitorScroll="True"
+                      ScrollViewer.CanContentScroll="True">
+            <ItemsControl x:Name="itemsControl"
                           ItemsSource="{Binding  Source={x:Static Core:MessageList.Items}}" >
                 <ItemsControl.ItemTemplate>
                     <DataTemplate >
-                        <local:MessageItemControl />
+                        <local:MessageItemControl/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
-                <!--<i:Interaction.Behaviors>
-                    <ei:FluidMoveBehavior >
-                        <ei:FluidMoveBehavior.EaseY>
-                            <CubicEase EasingMode="EaseOut"/>
-                        </ei:FluidMoveBehavior.EaseY>
-                    </ei:FluidMoveBehavior>
-                </i:Interaction.Behaviors>-->
+               
             </ItemsControl>
         </ScrollViewer>
-              
+
     </Grid>
 </UserControl>

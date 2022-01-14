@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 
 namespace MVVMChatClient
 {
@@ -16,6 +18,18 @@ namespace MVVMChatClient
                 new FrameworkPropertyMetadata(false, OnScrollChanged));
 
         private static bool FirstAddDone { get; set; }
+        private bool LinesCountComplete { get; set; }
+        /// <summary>
+        /// Detect if scrollbar thumb was rolled down
+        /// </summary>
+        private static bool WasRollback { get; set; } 
+        /// <summary>
+        /// To ensure that the mouse down will execute only one time.
+        /// </summary>
+        public static int MouseDownCounter { get; set; }
+        public static bool KeyDown { get; set; }
+        public static bool MouseDown { get; set; }
+        public static bool MouseWeel { get; internal set; }
 
         private static void OnScrollChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -30,51 +44,90 @@ namespace MVVMChatClient
         {
             var scroll = sender as ScrollViewer;
 
-            if(MVVMChatClient.Core.Model.CurrentChatMode.Mode == Core.Model.ChatMode.Public)
+            // Scroll to the bottom when writing or receiving new message scroll is at the bottom.
+            if (scroll.ScrollableHeight - scroll.VerticalOffset < 95)
             {
-                if (scroll.ScrollableHeight - scroll.VerticalOffset > scroll.ScrollableHeight*0.7 && FirstAddDone
-                     && !Core.Model.ChatSwitching.ChatSwitchBase.AllItemsAdded &&
-                     Core.Model.ChatSwitching.ChatSwitchBase.FinishAdd)
-                {
-                    Core.Model.PublicChat.ChatListHolder.AddAdditionalMessages();
-                    Core.Model.ChatSwitching.ChatSwitchBase.FinishAdd = false;
-                }
-
-                FirstAddDone = true;
-            }
-            else if (MVVMChatClient.Core.Model.CurrentChatMode.Mode == Core.Model.ChatMode.Private)
-            {
-                if (scroll.ScrollableHeight - scroll.VerticalOffset > scroll.ScrollableHeight * 0.7 && FirstAddDone
-                    && !Core.Model.ChatSwitching.ChatSwitchBase.AllItemsAdded &&
-                    Core.Model.ChatSwitching.ChatSwitchBase.FinishAdd)
-                {
-                    Core.Model.PrivateChat.ChatListHolder.AddAdditionalMessages();
-                    Core.Model.ChatSwitching.ChatSwitchBase.FinishAdd = false;
-                }
-
-                FirstAddDone = true;
+                scroll.ScrollToBottom();
             }
 
+            // Scroll down if the mouse button down and messages have been added.
+            if (MouseDownCounter == 0 && MouseDown == true &&
+                scroll.ScrollableHeight - scroll.VerticalOffset > scroll.ScrollableHeight * 0.5)
+            {
+                scroll.ScrollToVerticalOffset(scroll.VerticalOffset + scroll.ScrollableHeight * 0.2);
+            }
 
-            //if (scroll.ScrollableHeight > scroll.VerticalOffset + 200 && !FirstAddDone)
+            if (scroll.ScrollableHeight - scroll.VerticalOffset > scroll.ScrollableHeight * 0.5)
+            {
+                WasRollback = true;
+            }
+
+            if (scroll.ScrollableHeight - scroll.VerticalOffset > scroll.ScrollableHeight * 0.7
+              && WasRollback && (MouseDownCounter == 1 || MouseWeel)
+               && Core.Model.ChatSwitching.MessageAddControl.FinishAdd)
+            {
+                WasRollback = false;
+
+
+                if (KeyDown == true)
+                    MouseDownCounter = 1;
+                else
+                    MouseDownCounter = 0;
+
+                Core.Model.ChatSwitching.MessageAddControl.FinishAdd = false;
+
+
+                Core.Model.PublicChat.ChatListHolder.AddAdditionalMessages();
+
+                if (KeyDown || MouseWeel)
+                    scroll.ScrollToVerticalOffset(scroll.VerticalOffset + (scroll.ScrollableHeight * 0.5));
+
+                MouseWeel = false;
+
+            }
+
+            //if (MVVMChatClient.Core.Model.CurrentChatMode.Mode == Core.Model.ChatMode.Public)
             //{
+
+            //    if (scroll.ScrollableHeight - scroll.VerticalOffset > scroll.ScrollableHeight * 0.7 && FirstAddDone
+            //         && !Core.Model.ChatSwitching.MessageAddControl.AllItemsAdded &&
+            //         Core.Model.ChatSwitching.MessageAddControl.FinishAdd && WasRollback)
+            //    {
+            //        WasRollback = false;
+
+            //        Core.Model.PublicChat.ChatListHolder.AddAdditionalMessages();
+
+
+            //        //if(Core.Model.ChatSwitching.MessageAddControl.FinishAdd)
+
+            //        Core.Model.ChatSwitching.MessageAddControl.FinishAdd = false;
+
+            //        //scroll.IsDeferredScrollingEnabled = true;
+            //        //scroll.IsManipulationEnabled = true;
+            //    }
+
+            //    //if (scroll.ScrollableHeight * 0.5 == scroll.VerticalOffset)
+            //    //{
+            //    //    isScrolledBack = true;
+            //    //}
+
             //    FirstAddDone = true;
-            //    //LotteryCore.NoPatterns.Patterns.StopAdding = true;
-            //    //LotteryCore.NoPatterns.Patterns.ButtonEnabled = true;
-            //    //LotteryCore.NoPatterns.Patterns.IsEnded = true;
             //}
-            //else if (scroll.ScrollableHeight - scroll.VerticalOffset < 300 &&
-            //    FirstAddDone/* && !LotteryCore.NoPatterns.Patterns.AllItemsAdded*/ && !AllowedAddItems)
+            //else if (MVVMChatClient.Core.Model.CurrentChatMode.Mode == Core.Model.ChatMode.Private)
             //{
-            //    AllowedAddItems = true;
-            //    //LotteryCore.NoPatterns.Patterns.PopulatePatterns();
-            //    OneScrollMaxWidth += 400;
-            //}
+            //    if (scroll.ScrollableHeight - scroll.VerticalOffset > scroll.ScrollableHeight * 0.7 && FirstAddDone
+            //        && !Core.Model.ChatSwitching.MessageAddControl.AllItemsAdded &&
+            //        Core.Model.ChatSwitching.MessageAddControl.FinishAdd)
+            //    {
+            //        Core.Model.PrivateChat.ChatListHolder.AddAdditionalMessages();
+            //        Core.Model.ChatSwitching.MessageAddControl.FinishAdd = false;
+            //    }
 
-            //if (scroll.ScrollableHeight > scroll.VerticalOffset + OneScrollMaxWidth && AllowedAddItems)
+            //    FirstAddDone = true;
+            //}
+            //else
             //{
-            //    AllowedAddItems = false;
-            //    //LotteryCore.NoPatterns.Patterns.StopAdding = true;
+
             //}
         }
 

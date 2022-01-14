@@ -11,8 +11,8 @@
              mc:Ignorable="d"
              d:DesignHeight="750" d:DesignWidth="1000" >
 
-    
-    
+
+
     <UserControl.Triggers>
         <EventTrigger RoutedEvent="UserControl.Loaded">
             <BeginStoryboard>
@@ -63,7 +63,7 @@
 
 
     <UserControl.Resources>
-        
+
         <BeginStoryboard x:Key="UnloadAnimation">
             <Storyboard>
                 <DoubleAnimation
@@ -87,7 +87,7 @@
                         Storyboard.TargetProperty="(local:UserSideWall.Opacity)" 
                         From="1" To="0" Duration="0:0:0.2" >
                 </DoubleAnimation>
-                
+
 
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="onlineUsers">
                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
@@ -357,10 +357,13 @@
         </Style>
 
     </UserControl.Resources>
-    
+
 
     <Grid >
 
+        <Grid.Background>
+            <ImageBrush ImageSource="pack://application:,,,/MVVMChatClient;component/View/Images/e313a08e5b0455b1d2b5f345b2cdb97f.jpg"/>
+        </Grid.Background>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="10"/>
@@ -452,6 +455,84 @@
             </StackPanel.RenderTransform>
 
         </StackPanel>
+
+        <Button x:Name="Exit"
+                Grid.Column="11"
+                Margin="10 10 10 10"
+                Grid.Row="1"
+                Background="Transparent"
+                Command="{Binding _SignOut}"
+                FontSize="30">
+
+            <Button.Style >
+
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="0">
+                                    <Grid>
+                                        <Image x:Name="SerchImage" Source="pack://application:,,,/MVVMChatClient;component/View/Images/ExitBlack.png" />
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Source" TargetName="SerchImage" Value="pack://application:,,,/MVVMChatClient;component/View/Images/ExitGrey.png"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="Source" TargetName="SerchImage" Value="pack://application:,,,/MVVMChatClient;component/View/Images/ExitBlack.png"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+
+                </Style>
+
+            </Button.Style>
+
+        </Button>
+
+        <Button x:Name="Settings"
+                Grid.Column="12"
+                Margin="10 10 10 10"
+                Grid.Row="1"
+                Background="Transparent"
+                Command="{Binding _Settings}"
+                FontSize="30">
+
+            <Button.Style >
+
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="0">
+                                    <Grid>
+                                        <Image x:Name="SerchImage" Source="pack://application:,,,/MVVMChatClient;component/View/Images/SettingsBlack.png" />
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Source" TargetName="SerchImage" Value="pack://application:,,,/MVVMChatClient;component/View/Images/SettingsGrey.png"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="Source" TargetName="SerchImage" Value="pack://application:,,,/MVVMChatClient;component/View/Images/SettingsBlack.png"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+
+                </Style>
+
+            </Button.Style>
+
+        </Button>
 
         <Button x:Name="send"
                 IsDefault="True"

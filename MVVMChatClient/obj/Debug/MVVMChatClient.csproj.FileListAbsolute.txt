@@ -141,3 +141,8 @@ C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClie
 C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\obj\Debug\View\ChattingArea\PrivateChat.baml
 C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\bin\Debug\PBKDF2.NET.dll
 C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\bin\Debug\PBKDF2.NET.xml
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\obj\Debug\MVVMChatClient_Content.g.cs
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\obj\Debug\View\Settings.g.cs
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\obj\Debug\View\Settings.baml
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\obj\Debug\View\LogInAndSignIn\PasswordSender.g.cs
+C:\Users\artur\Documents\Visual Studio 2017\Projects\MVVMChatClient\MVVMChatClient\obj\Debug\View\LogInAndSignIn\PasswordSender.baml

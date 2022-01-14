@@ -8,6 +8,9 @@ namespace MVVMChatClient.Core.Model
 {
     public static class UserGender
     {
+        /// <summary>
+        /// Holds current user gender.
+        /// </summary>
         public static string YourGender { get; set; }
         public static string GetUserGender()
         {

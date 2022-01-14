@@ -55,10 +55,11 @@ namespace MVVMChatClient.Core.ViewModel
         {
             get
             {
-                if (UserInfo.AddedPicture == null)
-                    return userPicture = UserInfo.DefaultPicture;
-                else
-                    return UserInfo.AddedPicture;
+                //if (UserInfo.AddedPicture == null)
+                //    return userPicture = UserInfo.DefaultPicture;
+                //else
+                //    return UserInfo.AddedPicture;
+                return userPicture;
             }
             set
             {
@@ -100,7 +101,7 @@ namespace MVVMChatClient.Core.ViewModel
 
             MessageList.Items.Clear();
 
-            Model.ChatSwitching.ChatSwitchBase.RessetData();
+            Model.ChatSwitching.MessageAddControl.ResetData();
 
             Model.PublicChat.ChatListHolder.AddMessagesFirstTime();
 
@@ -131,9 +132,11 @@ namespace MVVMChatClient.Core.ViewModel
 
                 Model.OnlineUsersList.Notifications.Remove();
 
-                Model.ChatSwitching.ChatSwitchBase.RessetData();
+                Model.ChatSwitching.MessageAddControl.ResetData();
 
                 User.PrivatePersonId = PrivateCahtPersonData.RepeatGet.PersonId;
+
+                UserPicture = PrivateCahtPersonData.RepeatGet.UserPicture;
 
                 NameText = PrivateCahtPersonData.RepeatGet.UserName;
 
@@ -168,7 +171,8 @@ namespace MVVMChatClient.Core.ViewModel
             _jsonMessageContainer.Message.IdList = new List<string>() { User.Id, User.PrivatePersonId };
 
             _jsonMessageContainer.Message.MessageText = SendText;
-            _jsonMessageContainer.Message.MessageTime = DateTime.Now.ToShortTimeString();
+
+            _jsonMessageContainer.Message.MessageTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             _jsonMessageContainer.Message.MessageColour = SenderReceiwer.Send;
 
             if (!_jsonMessageContainer.Message.PictureChanged)

@@ -10,7 +10,7 @@ using System.Windows.Threading;
 
 namespace MVVMChatClient.Core.Model.PrivateChat
 {
-    public class ChatListHolder:ChatSwitchBase
+    public class ChatListHolder:MessageAddControl
     {
         public static Dictionary<string, ObservableCollection<IMessageContent>> Content { get; set; } =
             new Dictionary<string, ObservableCollection<IMessageContent>>();
@@ -62,33 +62,6 @@ namespace MVVMChatClient.Core.Model.PrivateChat
 
         }
 
-        //public static void TestPopulateMessages()
-        //{
-        //    int count = 0;
-
-        //    ObservableCollection<IMessageContent> messages = new ObservableCollection<IMessageContent>();
-
-        //    while (count <= 100)
-        //    {
-        //        MessageContent messageContent = new MessageContent()
-        //        {
-        //            Id = 1,
-        //            MessageAlignment = "Right",
-        //            MessageColour = "White",
-        //            MessagePictureVisibility = "Hidden",
-        //            MessageText = count.ToString(),
-        //            MessageTime = "00:00",
-        //            Name = "Archi",
-        //            MessagePicture = Gender.Male
-        //        };
-
-        //        messages.Add(messageContent);
-
-        //        count++;
-        //    }
-        //    Content.Add(1, messages);
-
-        //}
 
         public static void AddToPersonChat(List<string> userID, IMessageContent messageContent)
         {

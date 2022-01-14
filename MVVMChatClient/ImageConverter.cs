@@ -36,7 +36,8 @@ namespace MVVMChatClient
                 {
                     CreateFolder();
 
-                    image.Save(@"C:\Users\X\Downloads\ChatData\ChatImage" + id + ".jpg", ImageFormat.Jpeg);  // Or Png
+                    image.Save(/*@"C:\Users\X\Downloads\ChatData\ChatImage"*/Path.GetTempPath() + "ChatImage" +
+                        id + ".jpg", ImageFormat.Jpeg);
                 }
                 catch (Exception ex)
                 {

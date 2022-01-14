@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MVVMChatClient"
              mc:Ignorable="d" 
-             d:DesignHeight="350" d:DesignWidth="400" x:Name="UserControl">
+             d:DesignHeight="350" d:DesignWidth="500" x:Name="UserControl">
     
     <UserControl.Triggers>
         <EventTrigger RoutedEvent="UserControl.Loaded">
@@ -20,7 +20,7 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Border x:Name="border" BorderThickness="5" Height="350" Width="400" >
+    <Border x:Name="border" Height="350" Width="500" >
 
         <Border.RenderTransform>
             <TransformGroup>
@@ -31,14 +31,11 @@
             </TransformGroup>
         </Border.RenderTransform>
 
-        <Border.BorderBrush>
-            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="1.2,0">
-                <GradientStop Color="Black" Offset="0.765"/>
-                <GradientStop Color="#FFEE2D2D"/>
-            </LinearGradientBrush>
-        </Border.BorderBrush>
+        <Border.Background>
+            <ImageBrush ImageSource="pack://application:,,,/MVVMChatClient;component/View/Images/cloud1.png"/>
+        </Border.Background>
 
-        <Grid  Background="#FF2B2929">
+        <Grid >
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -46,7 +43,43 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBox Height="40" Width="200" 
+            <Button Grid.Row="1"
+                    Margin="0 87 79 0"
+                    Height="25"
+                    Width="130"
+                    Content="Forgot password?"
+                    FontSize="15"
+                    FontWeight="SemiBold"
+                    Foreground="#FF9C2222"
+                    BorderBrush="{x:Null}"
+                    Style="{DynamicResource ForgotPasswordButton}"
+                    Background="{x:Null}"
+                    Command="{Binding ForgotPassword}">
+
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="Button.Click">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="border">
+                                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-1300"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Button.Triggers>
+
+            </Button>
+
+            <Label Content="Incorrect user name or password!"
+                   Grid.Row="2"
+                   FontSize="17"
+                   Height="30"
+                   Foreground="Red"
+                   Margin="120 0 120 90"
+                   Visibility="{Binding LogInErrorMessage}"/>
+
+            <TextBox Height="40" Width="200"
                      Tag="User Name"
                      Margin="0 60 0 0"
                      FontSize="25"
@@ -78,12 +111,13 @@
                     Margin="0 40 10 2"
                     Height="40"
                     Width="120"
-                    Foreground="White"
+                    Foreground="#FF4D4D4D"
                     Content="Log In"
                     FontSize="20"
                     FontWeight="Bold"
                     Background="Transparent"
-                    Style="{StaticResource ButtonLogInSignIn}"
+                    IsEnabled="{Binding LogInButton}"
+                    Style="{StaticResource ButtonLoading}"
                     CommandParameter="{Binding SecurePassword, ElementName = Password}"
                     Command="{Binding LogInCommand}">
 
@@ -94,11 +128,12 @@
                     Margin="270 40 10 2"
                     Height="35"
                     Width="95"
-                    Foreground="White"
+                    Foreground="#FF4D4D4D"
                     Content="To Sign In"
                     FontSize="15"
                     FontWeight="DemiBold"
                     Background="Transparent"
+                    IsEnabled="{Binding LogInButton}"
                     Style="{StaticResource ButtonLogInSignIn}"
                     Command="{Binding SwitchToSignIn}">
 

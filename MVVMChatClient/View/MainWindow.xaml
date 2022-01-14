@@ -22,18 +22,27 @@
         <DataTemplate DataType="{x:Type Core:LogInViewModel}">
             <Border>
                 <Border.Background>
-                    <ImageBrush ImageSource="Images/background-typography-4.jpg"/>
+                    <ImageBrush ImageSource="Images/CloudsLogInSignIn.jpg"/>
                 </Border.Background>
-                <local:Login Height="350" Width="400"/>
+                <local:Login Height="350" Width="500"/>
             </Border>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type Core:SignInViewModel}">
             <Border >
                 <Border.Background>
-                    <ImageBrush ImageSource="Images/background-typography-4.jpg"/>
+                    <ImageBrush ImageSource="Images/CloudsLogInSignIn.jpg"/>
                 </Border.Background>
-                <local:SignIn Height="400" Width="400"/>
+                <local:SignIn Height="400" Width="500"/>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Core:PasswordSenderViewModel}">
+            <Border >
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/CloudsLogInSignIn.jpg"/>
+                </Border.Background>
+                <local:PasswordSender Height="220" Width="500"/>
             </Border>
         </DataTemplate>
 
@@ -43,6 +52,10 @@
 
         <DataTemplate DataType="{x:Type Core:PrivateChatViewModel}">
             <local:PrivateChat/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Core:SettingsViewModel}">
+            <local:Settings/>
         </DataTemplate>
 
     </Window.Resources>
@@ -63,7 +76,10 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Background="#FF233A3A" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
+        <Grid Background="Transparent"
+              MouseLeftButtonDown="Grid_MouseLeftButtonDown"
+              Panel.ZIndex="1">
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="30"/>
@@ -101,9 +117,13 @@
                     Width="30" Height="30"
                     Click="Cloase_Click"/>
 
+            
         </Grid>
 
-        <Frame Grid.Row="1" Content="{Binding CurrentView}" NavigationUIVisibility="Hidden"/>
+        <Frame Grid.Row="0"
+               Grid.RowSpan="2"
+               Content="{Binding CurrentView}"
+               NavigationUIVisibility="Hidden"/>
     </Grid>
 
 </Window>

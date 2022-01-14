@@ -11,8 +11,7 @@ namespace MVVMChatClient.Core.Model
     public class Person : IPerson
     {
         public string Name { get; set; }
-        public bool Male { get; set; }
-        public bool Female { get; set; }
+        public int Sex { get; set; }
         public Socket Connection { get; set; }
         public string PersonId { get; set; }
         public string PicturePath { get; set; }

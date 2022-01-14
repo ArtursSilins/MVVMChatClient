@@ -10,23 +10,24 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.IO;
-using MVVMChatClient.Core.Model.ClientComunication;
 using MVVMChatClient.Core.Model.EncryptAndDecrypt;
 using MVVMChatClient.Core.Model.Authorization;
+using MVVMChatClient.Core.ViewModel;
 
 namespace MVVMChatClient.Core.Model
 {
     public class Chatting : IChatting
     {
+        private static CancellationTokenSource Source { get; set; }
+        private static SynchronizationContext UiContext { get; set; }
+
+        private CancellationToken token;
         private bool FirstTime { get; set; }
 
-        private bool IsConnected { get; set; }
-
-        private static StringBuilder TextFromServer { get; set; } 
+        private static StringBuilder TextFromServer { get; set; }
 
         private IWindowsViewModel _windowsViewModel;
 
-        private static ManualResetEvent receiveDone = new ManualResetEvent(false);
         private static ManualResetEvent connectDone = new ManualResetEvent(false);
 
         private void SendCallback(IAsyncResult ar)
@@ -46,11 +47,15 @@ namespace MVVMChatClient.Core.Model
 
         private static void GetAllMessages(IMessageContent messageContent, IJsonBaseContainer container, SynchronizationContext uiContext)
         {
+            if (container.Messages == null) return;
+
             foreach (var item in container.Messages)
             {
-                uiContext.Send(x => MessageList.Items.Add(messageContent.NewInstance(item)), null);
+                //uiContext.Send(x => MessageList.Items.Add(messageContent.NewInstance(item)), null);
+
                 PublicChat.ChatListHolder.Content.Add(messageContent.NewInstance(item));
             }
+            PublicChat.ChatListHolder.AddFirstTimeMessages(uiContext);
         }
 
         private void ChangeOnlineUserList(SynchronizationContext uiContext, IJsonBaseContainer container, string textFromServer)
@@ -64,14 +69,14 @@ namespace MVVMChatClient.Core.Model
                     ConvertImage.ByteToImage(container.Persons[container.Persons.Count - 1].Pic,
                         container.Persons[container.Persons.Count - 1].PersonId);
                     temporaryUserContent.UserPicture = container.Persons[container.Persons.Count - 1].PicturePath;
-                    temporaryUserContent.UserName = container.Persons[container.Persons.Count - 1].Name;
+                    temporaryUserContent.UserName = container.Persons[container.Persons.Count - 1].PersonId;//.Name;
                     temporaryUserContent.PersonId = container.Persons[container.Persons.Count - 1].PersonId;
                 }
                 else
                 {
-                    if (container.Persons[container.Persons.Count - 1].Female == true) temporaryUserContent.UserPicture = Gender.Female;
-                    if (container.Persons[container.Persons.Count - 1].Male == true) temporaryUserContent.UserPicture = Gender.Male;
-                    temporaryUserContent.UserName = container.Persons[container.Persons.Count - 1].Name;
+                    if (container.Persons[container.Persons.Count - 1].Sex == 2) temporaryUserContent.UserPicture = Gender.Female;
+                    if (container.Persons[container.Persons.Count - 1].Sex == 1) temporaryUserContent.UserPicture = Gender.Male;
+                    temporaryUserContent.UserName = container.Persons[container.Persons.Count - 1].PersonId;//.Name;
                     temporaryUserContent.PersonId = container.Persons[container.Persons.Count - 1].PersonId;
                 }
                               
@@ -98,11 +103,19 @@ namespace MVVMChatClient.Core.Model
                 }
                 else
                 {
-                    if (item.Female == true) temporaryUserContent.UserPicture = Gender.Female;
-                    if (item.Male == true) temporaryUserContent.UserPicture = Gender.Male;
+                    if (item.Sex == 2)
+                    {
+                        temporaryUserContent.UserPicture = Gender.Female;
+                        UserInfo.DefaultPicture = Gender.Female;
+                    }
+                    if (item.Sex == 1)
+                    {
+                        UserInfo.DefaultPicture = Gender.Male;
+                        temporaryUserContent.UserPicture = Gender.Male;
+                    }
                 }
 
-                temporaryUserContent.UserName = item.Name;
+                temporaryUserContent.UserName = item.PersonId;
                 temporaryUserContent.PersonId = item.PersonId;
 
                 uiContext.Send(x => OnlineUsers.UserList.Insert(0, temporaryUserContent), null);
@@ -140,53 +153,6 @@ namespace MVVMChatClient.Core.Model
 
         }
 
-        private StringBuilder ReceivData(SynchronizationContext uiContext, IJsonBaseContainer container)
-        {
-
-            var buffer = new byte[256];
-
-            int size = 0;
-
-            var textFromServer = new StringBuilder();
-
-            do
-            {
-                try
-                {
-                    size = TcpSocket.tcpSocket.Receive(buffer);
-                }
-                catch (Exception ex)
-                {
-                    AlertMessages.Show(ex.Message);
-
-                    uiContext.Send(x=> OnlineUsers.UserList.Clear(), null);
-
-                    container?.Persons?.Clear();
-
-                    TcpSocket.tcpSocket.Shutdown(SocketShutdown.Both);
-
-                    TcpSocket.tcpSocket.BeginDisconnect(true, new AsyncCallback(DisconnectCallback), TcpSocket.tcpSocket);
-
-
-                    IsConnected = false;
-
-                    _windowsViewModel.ChangeView(1);
-
-                }
-                
-
-                textFromServer.Append(Encoding.UTF8.GetString(buffer, 0, size));
-
-            } while (TcpSocket.tcpSocket.Available > 0);
-
-            return textFromServer;
-        }
-        private static void DisconnectCallback(IAsyncResult ar)
-        {
-            Socket client = (Socket)ar.AsyncState;
-            client.EndDisconnect(ar);
-        }
-
         private int GetIndexToRemove( List<Person> serverPersons )
         {
             int indexCount = -1;
@@ -207,142 +173,94 @@ namespace MVVMChatClient.Core.Model
 
             return indexCount;
         }
-        private void ConnectingToServer()
-        {
-            try
-            {
-                EndPoint endPoint = new EndPoint();
-
-                TcpSocket.tcpSocket.BeginConnect(endPoint.TcpEndPoint, new AsyncCallback(ConnectCallback), TcpSocket.tcpSocket);
-                connectDone.WaitOne();
-
-
-                Connection.Status = true;
-            }
-            catch (SocketException ex)
-            {
-                Connection.Status = false;
-                _windowsViewModel.ChangeView(0);
-                return;
-            }
-            catch (Exception ex)
-            {
-
-            }
-
-        }
-
-        private void ConnectCallback(IAsyncResult ar)
-        {
-            Socket client = (Socket)ar.AsyncState;
-            try
-            {
-                client.EndConnect(ar);
-            }
-            catch (Exception)
-            {
-                AlertMessages.Show("Server not available! :( We are working on this issue, please try again later.");
-            }
-            
-            connectDone.Set();
-        }
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ///
-
+        
 
         public void Receiving(IWindowsViewModel windowsViewModel,
             IMessageContent messageContent,
             IJsonBaseContainer container,
-            IJsonMessageContainer jsonMessageContainer
-            , ICredential credential)
+            IJsonMessageContainer jsonMessageContainer)
         {
+            ICredential credential = Factory.CreateCredential();
 
             _windowsViewModel = windowsViewModel;
 
             FirstTime = true;
 
-            IsConnected = true;
+            UiContext = SynchronizationContext.Current;
 
-            var uiContext = SynchronizationContext.Current;
+            Source = new CancellationTokenSource();
+
+            token = Source.Token;
 
             Task.Run(() =>
             {
 
 
-                if (GetPermission(uiContext, container, credential))///true then next
+                if (CredentialConfirmation.GetPermission(UiContext, container, credential,
+                    TextFromServer, _windowsViewModel))
                 {
                     _windowsViewModel.ChangeView(2);
 
-                    Chat(uiContext, container, messageContent, jsonMessageContainer);
+                    Security.UserPassword.Password.Clear();
+                    Security.UserPassword.Password.Dispose();
+
+                    Chat(UiContext, container, messageContent, jsonMessageContainer);
 
                 }
                 else
                 {
-
                     _windowsViewModel.ChangeView(1);
-
-                    // here some static error class witch binding to label under login panel to show message!
                 }
 
-            });
+            }, token);
 
         }
 
-        private bool GetPermission(SynchronizationContext uiContext, IJsonBaseContainer container, ICredential credential)
+        public static void CancelChatTask()
         {
-            bool userExists = false;
-
-                ConnectingToServer();
-
-            // send public key
-            AsymmetricEncryption.CreateKey("Client");
-
-            credential.NeedAction = true;
-            credential.NeedKeys = true;
-            credential.PubKey = AsymmetricEncryption.PubKeyString("Client");
-            
-            TcpSocket.tcpSocket.BeginSend(ConverData.SendPubKey(credential), 0,
-                ConverData.SendPubKey(credential).Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
-
-
-            //TcpSocket.tcpSocket.BeginSend(ConverData.ToSend(PersonList.GetPersonInfo()), 0, ConverData.ToSend(PersonList.GetPersonInfo()).Length, 0, new AsyncCallback(SendCallback), TcpSocket.tcpSocket);
-            connectDone.WaitOne();
-
-            TextFromServer = ReceivData(uiContext, container);
-
-            try
+            if(Source != null)
             {
-                credential = ConverData.ReceivKeys<Credential>(TextFromServer.ToString());
-
-                credential.IV = AsymmetricEncryption.DecryptWithPrivateKey(credential.IV);
-                credential.SymmetricKey = AsymmetricEncryption.DecryptWithPrivateKey(credential.SymmetricKey);
-
-                KeyContainer.SymmetricKey.UserKeys = new System.Security.Cryptography.RijndaelManaged();
-                KeyContainer.SymmetricKey.UserKeys.Key = Convert.FromBase64String(credential.SymmetricKey);
-                KeyContainer.SymmetricKey.UserKeys.IV = Convert.FromBase64String(credential.IV);
-
-                credential.IV = null;
-                credential.SymmetricKey = null;
-
-                //if apruval ok userExists = true
-                userExists = false; //just for test!!!!!!!!!!!!
+                Source.Cancel();
             }
-            catch (Exception ex)
-            {
-                Console.Write(ex.ToString());
-            }
-
-
-
-            return userExists;
         }
+
+        //private bool GetPermission(SynchronizationContext uiContext, IJsonBaseContainer container, ICredential credential)
+        //{
+        //    bool userExists = false;
+
+        //    if (!LogInViewModel.FirstTimeLogin)
+        //    {
+        //        Connection.MakeConnection(uiContext, container, credential, _windowsViewModel);
+        //    }
+
+        //    CredentialConfirmation credentialConfirmation = new CredentialConfirmation();
+
+        //    do
+        //    {
+        //        TextFromServer = Connection.ReceivData(uiContext, container, _windowsViewModel);
+
+        //        if (!TextFromServer.ToString().Contains("Login"))
+        //        {
+        //            credentialConfirmation = ConverData.ToReceiv<CredentialConfirmation>(TextFromServer.ToString());
+        //            userExists = credentialConfirmation.Status;
+
+        //            LogInViewModel.RaiseEndLoadingEvent(userExists);
+                  
+        //        }
+
+        //    } while (!userExists);
+
+
+        //    return userExists;
+        //}
+
         private void Chat(SynchronizationContext uiContext, IJsonBaseContainer container,
             IMessageContent messageContent, IJsonMessageContainer jsonMessageContainer)
         {
-            while (IsConnected)
+            while (Connection.Status)
             {
-                if (!FirstTime)
-                    TextFromServer = ReceivData(uiContext, container);
+                //if (!FirstTime)
+                    TextFromServer = Connection.ReceivData(uiContext, container, _windowsViewModel);
 
                 try
                 {
@@ -357,6 +275,16 @@ namespace MVVMChatClient.Core.Model
                 {
                     if (container.CurrentPersonId != null)
                         User.Id = container.CurrentPersonId;
+
+                    foreach (var item in container.Persons)
+                    {
+                        if(item.PersonId == User.Id)
+                        {
+                            if (item.Sex == 1) UserGender.YourGender = Gender.Male;
+                            if (item.Sex == 2) UserGender.YourGender = Gender.Female;
+                            break;
+                        }
+                    }
 
                     AddToOnlineUserList(uiContext, container);
 
@@ -375,6 +303,17 @@ namespace MVVMChatClient.Core.Model
 
                 }
             }
+        }
+        /// <summary>
+        /// Reset all.
+        /// </summary>
+        public static void RemoveAllContent()
+        {
+            UiContext.Send(x => MessageList.Items.Clear(), null);
+
+            Model.PublicChat.ChatListHolder.Content.Clear();
+
+            UiContext.Send(x => OnlineUsers.UserList.Clear(), null);
         }
     }
 }

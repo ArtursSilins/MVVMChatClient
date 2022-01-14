@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="400">
+             d:DesignHeight="420" d:DesignWidth="500">
 
     <UserControl.Triggers>
         <EventTrigger RoutedEvent="UserControl.Loaded">
@@ -19,15 +19,11 @@
         </EventTrigger>
     </UserControl.Triggers>
    
-    <Border x:Name="border"
-            BorderThickness="5">
+    <Border x:Name="border">
 
-        <Border.BorderBrush>
-            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="1.2,0">
-                <GradientStop Color="Black" Offset="0.765"/>
-                <GradientStop Color="#FFEE2D2D"/>
-            </LinearGradientBrush>
-        </Border.BorderBrush>
+        <Border.Background>
+            <ImageBrush ImageSource="pack://application:,,,/MVVMChatClient;component/View/Images/cloudSignIn.png"/>
+        </Border.Background>
 
         <Border.RenderTransform>
             <TransformGroup>
@@ -38,19 +34,12 @@
             </TransformGroup>
         </Border.RenderTransform>
 
-        <Border.Effect>
-            <DropShadowEffect Color="Black"
-                              Direction="320"
-                              ShadowDepth="5"
-                              Opacity="0.6"
-                              BlurRadius="30"/>
-        </Border.Effect>
-
-        <Grid Background="#FF2B2929">
+        <Grid >
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -59,53 +48,118 @@
 
             <TextBox Tag="Name" 
                      Foreground="White"
+                     Margin="0 10 0 0"
                      Height="40" Width="250" 
                      HorizontalContentAlignment="Center"
                      VerticalContentAlignment="Center"
                      FontSize="20"
                      FontWeight="Bold"
-                     Text="{Binding NameText, Mode = TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{DynamicResource LogInSignInStyle}" >
+                     Text="{Binding UserName}"
+                     Style="{DynamicResource LogInSignInStyle}"
+                     Visibility="{Binding NameVisibility}">
 
             </TextBox>
 
             <TextBox Tag="Email"
                      Foreground="White"
                      Grid.Row="1"
+                     Margin="0 10 0 0"
                      Height="40" Width="250" 
                      HorizontalContentAlignment="Center"
                      VerticalContentAlignment="Center"
                      FontSize="17"
                      FontWeight="Normal"
-                     Text="{Binding EmailText, Mode = TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{DynamicResource LogInSignInStyle}" >
+                     Text="{Binding Email}"
+                     Style="{DynamicResource LogInSignInStyle}"
+                     Visibility="{Binding EmailVisibility}">
 
             </TextBox>
 
-            <TextBox Tag="Password"
-                     Foreground="White"
+            <RadioButton Content="Male"
                      Grid.Row="2"
-                     Height="40" Width="250" 
-                     HorizontalContentAlignment="Center"
-                     VerticalContentAlignment="Center"
-                     FontSize="20"
-                     FontWeight="Bold"
-                     Text="{Binding EmailText, Mode = TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{DynamicResource LogInSignInStyle}" >
+                     IsChecked="{Binding Male}"
+                     Background="White"
+                     BorderBrush="CornflowerBlue"
+                     Foreground="#FF4D4D4D"
+                     Margin="0 0 110 0"
+                     FontSize="15"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Style="{DynamicResource RadioButtonStyle1}"
+                     Visibility="{Binding MaleVisibility}"/>
+            <RadioButton Content="Female"
+                     Grid.Row="2"
+                     IsChecked="{Binding Female}"
+                     Background="WhiteSmoke"
+                     BorderBrush="LightPink"
+                     Margin="110 0 0 0"
+                     Foreground="#FF4D4D4D"
+                     FontSize="15"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Style="{DynamicResource RadioButtonStyle1}"
+                     Visibility="{Binding FemaleVisibility}"/>
 
-            </TextBox>
-            <TextBox Tag="Confirm Password"
-                     Foreground="White"
-                     Grid.Row="3"
-                     Height="40" Width="250" 
-                     HorizontalContentAlignment="Center"
-                     VerticalContentAlignment="Center"
-                     FontSize="20"
-                     FontWeight="Bold"
-                     Text="{Binding EmailText, Mode = TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{DynamicResource LogInSignInStyle}" >
+            <PasswordBox Tag="Password"
+                         PasswordChanged="PasswordBox_PasswordChanged"  
+                         Foreground="White"
+                         Grid.Row="3"
+                         Margin="0 10 0 0"
+                         Height="40" Width="250" 
+                         HorizontalContentAlignment="Center"
+                         VerticalContentAlignment="Center"
+                         FontSize="20"
+                         FontWeight="Bold"
+                         Style="{DynamicResource PasswordBoxStyle}"
+                         Visibility="{Binding PasswordVisibility}">
 
-            </TextBox>
+            </PasswordBox>
+            <PasswordBox Tag="Confirm Password"
+                         PasswordChanged="PasswordBox_PasswordChanged_1"    
+                         Foreground="White"
+                         Grid.Row="4"
+                         Margin="0 10 0 0"
+                         Height="40" Width="250" 
+                         HorizontalContentAlignment="Center"
+                         VerticalContentAlignment="Center"
+                         FontSize="20"
+                         FontWeight="Bold"
+                         Style="{DynamicResource PasswordBoxStyle}" 
+                         Visibility="{Binding ConfirmPasswordVisibility}">
+
+            </PasswordBox>
+
+            <Label Content="{Binding ErrorMessage}"
+                   Grid.Row="5"
+                   FontSize="15"
+                   Height="30"
+                   Foreground="Red"
+                   HorizontalAlignment="Center"
+                   Visibility="{Binding SignInErrorVisibility}"/>
+            
+            <TextBlock Grid.Row="2"
+                   Grid.RowSpan="2"
+                   TextWrapping="Wrap"
+                   Width="300"
+                   HorizontalAlignment="Center"
+                   TextAlignment="Center"
+                   FontSize="30"
+                   FontWeight="SemiBold"
+                   Foreground="#FF1D9C59"
+                   Text="REGISTRATION COMPLETED"
+                   Visibility="{Binding RegistrationSuccess}"/>
+
+            <Border x:Name="CheckBorder"
+                    Grid.Row="4"
+                    Grid.RowSpan="2"
+                    Height="50"
+                    Width="50"
+                    Visibility="{Binding CheckVisibility}">
+
+                <Border.Background>
+                    <ImageBrush ImageSource="pack://application:,,,/MVVMChatClient;component/View/Images/CheckImage.png"/>
+                </Border.Background>
+            </Border>
 
             <!--<Border Grid.RowSpan="3"
                 Width="150"
@@ -122,56 +176,30 @@
 
             </Border>-->
 
-            <RadioButton Content="Male"
-                         IsChecked="{Binding Male}"
-                         Background="White"
-                         BorderBrush="CornflowerBlue"
-                         Foreground="LightGray"
-                         Margin="0 0 70 0"
-                         FontSize="15"
-                         Grid.Row="4"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
-                         Style="{DynamicResource RadioButtonStyle1}"
-                         Command="{Binding SetPicMale}">
-
-            </RadioButton>
-            <RadioButton Content="Female"
-                         IsChecked="{Binding Female}"
-                         Background="WhiteSmoke"
-                         BorderBrush="LightPink"
-                         Margin="150 0 0 0"
-                         Foreground="LightGray"
-                         FontSize="15"
-                         Grid.Row="4"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
-                         Style="{DynamicResource RadioButtonStyle1}"
-                         Command="{Binding SetPicFamele}">
-
-            </RadioButton>
+            
 
             <Button x:Name="Connect"
-                    IsEnabled="{Binding E}"
-                    Grid.Row="5"
+                    IsEnabled="{Binding SignInButton}"
+                    Grid.Row="6"
                     Content="Sign In"
-                    Margin="0 0 0 10"
-                    Foreground="White"
+                    Margin="0 0 0 15"
+                    Foreground="#FF4D4D4D"
                     FontSize="20"
                     FontWeight="Bold"
                     Background="Transparent"
                     Height="40"
                     Width="120"
-                    Style="{StaticResource ButtonLogInSignIn}"
-                    Command="{Binding SetView}"
+                    Style="{StaticResource ButtonLoading}"
+                    Command="{Binding _SignIn}"
+                    Visibility="{Binding SignInButtonVisibility}"
                 >
             </Button>
 
-            <Button Grid.Row="5"
-                    Margin="270 10 0 20"
+            <Button Grid.Row="6"
+                    Margin="270 0 0 20"
                     Height="35"
                     Width="95"
-                    Foreground="White"
+                    Foreground="#FF4D4D4D"
                     Content="To Log In"
                     FontSize="15"
                     FontWeight="DemiBold"

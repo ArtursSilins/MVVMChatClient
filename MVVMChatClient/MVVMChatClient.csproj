@@ -44,6 +44,7 @@
     <Reference Include="PBKDF2.NET, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PBKDF2.NET.2.0.0\lib\net45\PBKDF2.NET.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -74,6 +75,12 @@
     <Compile Include="AttachedProperties\MonitorPasswordBoxProperty.cs" />
     <Compile Include="AttachedProperties\PasswordBoxProperties.cs" />
     <Compile Include="AttachedProperties\ScrollVerticalPreload.cs" />
+    <Compile Include="View\LogInAndSignIn\PasswordSender.xaml.cs">
+      <DependentUpon>PasswordSender.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
     <Compile Include="ValueConverters\BoolenToVisibilityConverter.cs" />
     <Compile Include="View\ChattingArea\PrivateChat.xaml.cs">
@@ -102,7 +109,6 @@
     <Compile Include="View\ChattingArea\Messages\MessagePicture.xaml.cs">
       <DependentUpon>MessagePicture.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AttachedProperties\ScrollHelper.cs" />
     <Compile Include="View\ChattingArea\SideWall\UserSideWall.xaml.cs">
       <DependentUpon>UserSideWall.xaml</DependentUpon>
     </Compile>
@@ -112,6 +118,14 @@
     <Compile Include="View\ChattingArea\SideWall\UsersOnlineListContainer.xaml.cs">
       <DependentUpon>UsersOnlineListContainer.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\LogInAndSignIn\PasswordSender.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ChattingArea\PrivateChat.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -187,12 +201,33 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="View\Images\CheckImage.png" />
+    <Resource Include="View\Images\CloudPasswordReset.png" />
+    <Resource Include="View\Images\CloudsLogInSignIn.jpg" />
+    <Resource Include="View\Images\CloudSignIn.png" />
+    <Resource Include="View\Images\cloud1.png" />
+    <Resource Include="View\Images\SLF6jq.png" />
+    <Resource Include="View\Images\thumb-1920-1029784.jpg" />
+    <Resource Include="View\Images\4002246.jpg" />
+    <Resource Include="View\Images\4fedbec5172311b9e4a0d69bd395f78e.jpg" />
+    <Resource Include="View\Images\e313a08e5b0455b1d2b5f345b2cdb97f.jpg" />
+    <Resource Include="View\Images\50194b7860774d22f17c0bb2518f3bcd.png" />
+    <Resource Include="View\Images\SettingsGrey.png" />
+    <Resource Include="View\Images\SettingsBlack.png" />
+    <Resource Include="View\Images\ExitGrey.png" />
+    <Resource Include="View\Images\ExitGreen.png" />
+    <Resource Include="View\Images\ExitBlack.png" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="DataStore\DataStore\DataStore.xsd" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -203,9 +238,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="View\Images\background-wallpaper-texture-2.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\background-typography-4.jpg" />
@@ -223,10 +255,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="View\Images\wp9131742.jpg" />
+    <Resource Include="View\Images\download.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="View\Images\download.jpg" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

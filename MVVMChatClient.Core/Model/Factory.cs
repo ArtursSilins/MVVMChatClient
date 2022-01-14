@@ -11,10 +11,6 @@ namespace MVVMChatClient.Core.Model
 {
     public static class Factory
     {
-        public static ITcpEndPoint CreateEndPoint()
-        {
-            return new EndPoint();
-        }
         public static IMessageContent CreateMessageContent()
         {
             return new MessageContent();

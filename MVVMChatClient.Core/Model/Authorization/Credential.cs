@@ -1,13 +1,8 @@
 ﻿using MVVMChatClient.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MVVMChatClient.Core.Model.Authorization
 {
-    public class Credential:ICredential
+    public class Credential : ICredential
     {
         public bool Login { get; set; }
         public bool SignIn { get; set; }
@@ -19,5 +14,7 @@ namespace MVVMChatClient.Core.Model.Authorization
         public string IV { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
+        public string Email { get; set; }
+        public int Sex { get; set; }
     }
 }
